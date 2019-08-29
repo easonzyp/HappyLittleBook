@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="30dp"
+        android:background="@drawable/home_dialog_bg"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_expend_cate"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:text="支出分类" />
+
+        <TextView
+            android:id="@+id/tv_income_cate"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:text="收入分类" />
+
+        <TextView
+            android:id="@+id/tv_wallet_account"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:text="钱包账户" />
+
+        <TextView
+            android:id="@+id/tv_bill"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:text="年账单" />
+    </LinearLayout>
+</RelativeLayout>

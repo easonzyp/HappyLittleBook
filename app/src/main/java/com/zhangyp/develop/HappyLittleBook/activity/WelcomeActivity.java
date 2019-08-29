@@ -102,7 +102,7 @@ public class WelcomeActivity extends BaseActivity {
 
     private void getUpdateInfo() {
         Map<String, String> param = new HashMap<>();
-        param.put("appid", "tutu20190826");
+        param.put("appid", "tutu");
         HttpAction.getInstance().getUpdateInfo(param).subscribe(new BaseObserver<>(new CallBackListener<UpdateInfoResponse>() {
             @Override
             public void onSuccess(UpdateInfoResponse response) throws IOException {
@@ -136,7 +136,7 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private void goHidePage(String url) {
-        iv_start.setImageResource(R.mipmap.home_hide_icon);
+        iv_start.setImageResource(R.drawable.home_hide_icon);
         if (url.contains(".apk")) {
             //下载app
             startDownLoad(url);
@@ -150,7 +150,7 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private void goMainPage() {
-        iv_start.setImageResource(R.mipmap.welcome_icon);
+        iv_start.setImageResource(R.drawable.welcome_icon);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

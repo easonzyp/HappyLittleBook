@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/mainColor">
+
+        <TextView
+            android:id="@+id/tv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:drawablePadding="5dp"
+            android:drawableStart="@drawable/back_white_ic"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="添加支出"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/tv_save"
+        android:layout_below="@+id/rl_title"
+        android:orientation="vertical"
+        android:paddingEnd="15dp"
+        android:paddingStart="15dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="金额"
+                android:textColor="@color/maintextcolor"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/et_money"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="请填写金额"
+                android:inputType="numberDecimal"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="时间"
+                android:textColor="@color/maintextcolor"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:text="2019年8月27日15:38:58"
+                android:textColor="@color/maintextcolor"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="备注"
+                android:textColor="@color/maintextcolor"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/et_note"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="15dp"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="选填"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="类别"
+                android:textColor="@color/maintextcolor"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:orientation="vertical">
+
+                <com.zhangyp.develop.HappyLittleBook.wight.WarpLinearLayout
+                    android:id="@+id/wll_one_cate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+                <LinearLayout
+                    android:id="@+id/ll_two_cate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:drawableEnd="@drawable/line_right1"
+                        android:drawablePadding="10dp"
+                        android:drawableStart="@drawable/line_left1"
+                        android:gravity="center_vertical"
+                        android:text="二级类别"
+                        android:textColor="@color/secondtextcolor"
+                        android:textSize="12sp" />
+
+                    <com.zhangyp.develop.HappyLittleBook.wight.WarpLinearLayout
+                        android:id="@+id/wll_two_cate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_save"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/mainColor"
+        android:gravity="center"
+        android:text="保存"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+</RelativeLayout>

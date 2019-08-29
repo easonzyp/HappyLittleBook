@@ -120,13 +120,13 @@ public final class StatusBarHelper {
 
 
     /**
-     * @param useThemestatusBarColor 是否要状态栏的颜色，不设置则为透明色
+     * @param useThemeStatusBarColor 是否要状态栏的颜色，不设置则为透明色
      * @param orOtherColor           不透明时颜色
      */
-    public void setStatusBar(Activity activity, boolean useThemestatusBarColor, int orOtherColor) {
+    public void setStatusBar(Activity activity, boolean useThemeStatusBarColor, int orOtherColor) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//5.0及以上
-            activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            activity.getWindow().setStatusBarColor(useThemestatusBarColor ? orOtherColor : Color.TRANSPARENT);
+            activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            activity.getWindow().setStatusBarColor(useThemeStatusBarColor ? orOtherColor : Color.TRANSPARENT);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {//4.4到5.0
             WindowManager.LayoutParams localLayoutParams = activity.getWindow().getAttributes();
             localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);

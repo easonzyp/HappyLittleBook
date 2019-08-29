@@ -1,12 +1,17 @@
 package com.zhangyp.develop.HappyLittleBook.base;
 
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+
+import com.zhangyp.develop.HappyLittleBook.R;
+import com.zhangyp.develop.HappyLittleBook.util.StatusBarHelper;
 
 /**
  * Activity基类
@@ -15,21 +20,14 @@ import android.view.inputmethod.InputMethodManager;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-    /**
-     * 是否允许全屏
-     **/
-    public boolean mAllowFullScreen = false;
-    /**
-     * 是否禁止旋转屏幕
-     **/
-    public boolean isAllowScreenRoate = true;
-
+    public Context context;
     public LayoutInflater inflater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutId());
+        context = this;
         inflater = LayoutInflater.from(this);
         if (savedInstanceState != null) {
             initParam(savedInstanceState);
@@ -37,18 +35,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             initParam(getIntent().getExtras());
         }
 
-        if (mAllowFullScreen) {
-            this.getWindow().setFlags(
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            requestWindowFeature(Window.FEATURE_NO_TITLE);
-        }
-
-        if (!isAllowScreenRoate) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
+        StatusBarHelper.getInstance().setStatusBar(this, true,
+                ContextCompat.getColor(this, R.color.mainColor));
     }
 
     public void initParam(Bundle bundle) {

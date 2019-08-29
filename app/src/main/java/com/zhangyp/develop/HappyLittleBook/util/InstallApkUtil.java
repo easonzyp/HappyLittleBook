@@ -61,7 +61,7 @@ public class InstallApkUtil {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            Uri contentUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", apkFile);
+            Uri contentUri = FileProvider.getUriForFile(context, FileProviderName, apkFile);
             intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
         } else {
             intent.setDataAndType(Uri.fromFile(apkFile), "application/vnd.android.package-archive");
@@ -72,13 +72,14 @@ public class InstallApkUtil {
 //        System.exit(0);
     }
 
+    public static String FileProviderName = "com.zhangyp.develop.HappyLittleBook.fileProvider";
+
 
     /**
      * 卸载
-     *
      */
     public static void uninstallApk(Context context) {
-        Uri uri = Uri.parse("com.zhangyp.develop.HappyTools" );
+        Uri uri = Uri.parse("com.zhangyp.develop.HappyTools");
         Intent intent = new Intent(Intent.ACTION_DELETE, uri);
         context.startActivity(intent);
     }

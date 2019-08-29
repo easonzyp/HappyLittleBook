@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/mainColor">
+
+        <TextView
+            android:id="@+id/tv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:drawablePadding="5dp"
+            android:drawableStart="@drawable/back_white_ic"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            tools:text="支出分类" />
+    </RelativeLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="0.5dp"
+        android:background="@color/white">
+
+        <ListView
+            android:id="@+id/lv_one_cate"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:divider="@color/line"
+            android:dividerHeight="0.5dp"
+            tools:listitem="@layout/item_one_cate_list" />
+
+        <View
+            android:id="@+id/view_line1"
+            android:layout_width="0.5dp"
+            android:layout_height="match_parent"
+            android:background="@color/line"
+            app:layout_constraintStart_toEndOf="@id/lv_one_cate" />
+
+        <RelativeLayout
+            android:id="@+id/rl_cate_top"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/lv_one_cate">
+
+            <TextView
+                android:id="@+id/tv_two_cate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:text="二级分类" />
+
+            <ImageView
+                android:id="@+id/iv_add_two_cate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="15dp"
+                android:padding="5dp"
+                android:src="@drawable/add_black" />
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/view_line2"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:background="@color/line"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/lv_one_cate"
+            app:layout_constraintTop_toBottomOf="@+id/rl_cate_top" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_two_cate"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/view_line1"
+            app:layout_constraintTop_toBottomOf="@+id/view_line2"
+            tools:listitem="@layout/item_two_cate_list" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</LinearLayout>
