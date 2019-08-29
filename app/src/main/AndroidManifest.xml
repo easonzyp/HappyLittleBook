@@ -47,7 +47,7 @@
 
         <activity android:name=".activity.WebActivity" />
 
-        <activity android:name=".activity.AddExpenseActivity" />
+        <activity android:name=".activity.AddAccountBookActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

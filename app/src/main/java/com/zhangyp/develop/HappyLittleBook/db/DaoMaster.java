@@ -25,6 +25,7 @@ public class DaoMaster extends AbstractDaoMaster {
         ExpendLevelTwoCateDao.createTable(db, ifNotExists);
         IncomeLevelOneCateDao.createTable(db, ifNotExists);
         IncomeLevelTwoCateDao.createTable(db, ifNotExists);
+        AccountBookInfoDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
@@ -33,6 +34,7 @@ public class DaoMaster extends AbstractDaoMaster {
         ExpendLevelTwoCateDao.dropTable(db, ifExists);
         IncomeLevelOneCateDao.dropTable(db, ifExists);
         IncomeLevelTwoCateDao.dropTable(db, ifExists);
+        AccountBookInfoDao.dropTable(db, ifExists);
     }
 
     /**
@@ -55,6 +57,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(ExpendLevelTwoCateDao.class);
         registerDaoClass(IncomeLevelOneCateDao.class);
         registerDaoClass(IncomeLevelTwoCateDao.class);
+        registerDaoClass(AccountBookInfoDao.class);
     }
 
     public DaoSession newSession() {

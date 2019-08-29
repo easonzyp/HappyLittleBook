@@ -47,27 +47,16 @@ public class WarpLinearLayout extends ViewGroup {
      * @param mr       右外边距
      * @param mb       下外边距
      */
-    public void setData(String[] data, Context context, int textSize, int pl, int pt, int pr, int pb, int ml, int mt, int mr, int mb) {
+    public void setData(List<String> data, Context context, int textSize, int pl, int pt, int pr, int pb, int ml, int mt, int mr, int mb) {
+
         createChild(data, context, textSize, pl, pt, pr, pb, ml, mt, mr, mb);
     }
 
-    public void setData(List<String> data, Context context, int textSize, int pl, int pt, int pr, int pb, int ml, int mt, int mr, int mb) {
-        String[] tempData = null;
-        if (data != null) {
-            int length = data.size();
-            tempData = new String[length];
-            for (int i = 0; i < length; i++) {
-                tempData[i] = data.get(i);
-            }
-        }
-        setData(tempData, context, textSize, pl, pt, pr, pb, ml, mt, mr, mb);
-    }
-
-    private void createChild(final String[] data, final Context context, int textSize, int pl, int pt, int pr, int pb, int ml, int mt, int mr, int mb) {
-        final int size = data.length;
+    private void createChild(final List<String> data, final Context context, int textSize, int pl, int pt, int pr, int pb, int ml, int mt, int mr, int mb) {
+        this.removeAllViews();
+        final int size = data.size();
         for (int i = 0; i < size; i++) {
-            String text = data[i];
-            //通过判断style是TextView还是Button进行不同的操作，还可以继续添加不同的view
+            String text = data.get(i);
 
             TextView textView = new TextView(context);
             textView.setGravity(Gravity.CENTER);
@@ -87,21 +76,18 @@ public class WarpLinearLayout extends ViewGroup {
             textView.setBackgroundResource(R.drawable.unchoose_cate_corner_bg);
 
             //给每个view添加点击事件
-            textView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int tag = (int) v.getTag();
-                    for (int j = 0; j < data.length; j++) {
-                        if (j == tag) {
-                            v.setBackgroundResource(R.drawable.choose_cate_corner_bg);
-                            ((TextView) v).setTextColor(ContextCompat.getColor(context, R.color.white));
-                        } else {
-                            WarpLinearLayout.this.getChildAt(j).setBackgroundResource(R.drawable.unchoose_cate_corner_bg);
-                            ((TextView) WarpLinearLayout.this.getChildAt(j)).setTextColor(ContextCompat.getColor(context, R.color.secondtextcolor));
-                        }
+            textView.setOnClickListener(v -> {
+                int tag = (int) v.getTag();
+                for (int j = 0; j < data.size(); j++) {
+                    if (j == tag) {
+                        v.setBackgroundResource(R.drawable.choose_cate_corner_bg);
+                        ((TextView) v).setTextColor(ContextCompat.getColor(context, R.color.white));
+                    } else {
+                        WarpLinearLayout.this.getChildAt(j).setBackgroundResource(R.drawable.unchoose_cate_corner_bg);
+                        ((TextView) WarpLinearLayout.this.getChildAt(j)).setTextColor(ContextCompat.getColor(context, R.color.secondtextcolor));
                     }
-                    markClickListener.clickMark(data[tag], tag);
                 }
+                markClickListener.clickMark(data.get(tag), tag);
             });
             this.addView(textView);
         }

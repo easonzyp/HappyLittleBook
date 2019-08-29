@@ -152,6 +152,10 @@ public class ExpendCateManagerActivity extends BaseActivity {
         });
 
         iv_add_two_cate.setOnClickListener(v -> {
+            if (oneCateList == null || oneCateList.size() == 0) {
+                ToastUtil.showShortToast(context, "请先添加一级分类");
+                return;
+            }
             showDialogType = ADD_CATE_TYPE_TWO;
             tv_title.setText("添加二级分类");
             et_cate.setText("");
@@ -228,6 +232,11 @@ public class ExpendCateManagerActivity extends BaseActivity {
         et_cate.setText("");
         //重新获取一遍列表之后展示
         getOneCateList();
+
+        int position = oneCateList.size()-1;
+        oneCateAdapter.changeState(position);
+        oneCateId = oneCateList.get(position).getId();
+        getTwoCateList(oneCateId);
     }
 
     private void addTwoCate(String cateName) {
