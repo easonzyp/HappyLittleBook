@@ -3,49 +3,64 @@ package com.zhangyp.develop.HappyLittleBook.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.zhangyp.develop.HappyLittleBook.ExampleApplication;
 import com.zhangyp.develop.HappyLittleBook.R;
+import com.zhangyp.develop.HappyLittleBook.adapter.AccountBookInfoAdapter;
 import com.zhangyp.develop.HappyLittleBook.base.BaseActivity;
+import com.zhangyp.develop.HappyLittleBook.bean.AccountBookInfo;
+import com.zhangyp.develop.HappyLittleBook.db.DaoSession;
+import com.zhangyp.develop.HappyLittleBook.util.MyDividerItemDecoration;
+import com.zhangyp.develop.HappyLittleBook.util.ToastUtil;
 import com.zhangyp.develop.HappyLittleBook.wight.CustomDialog;
+import com.zhangyp.develop.HappyLittleBook.wight.HomeChoosePop;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends BaseActivity {
 
-    private TextView tv_app_name;
+    private DaoSession daoSession;
+
     private ImageView iv_more;
     private TextView tv_surplus;
-    private TextView tv_month;
     private TextView tv_expense_money;
     private TextView tv_expense_count;
-    private View view_line;
     private TextView tv_income_money;
     private TextView tv_income_count;
-    private ConstraintLayout cl_top;
     private RecyclerView rv_list;
-    private ImageView iv_empty;
     private ImageView iv_add_expense;
 
-    private CustomDialog dialog;
-    private View dialogView;
+    private CustomDialog dialogMore;
+    private View dialogViewMore;
+
+    private CustomDialog dialogChoose;
+    private View dialogViewChoose;
+    private LinearLayout ll_add_expend;
+    private LinearLayout ll_add_income;
+
     private TextView tv_expend_cate;
     private TextView tv_income_cate;
     private TextView tv_wallet_account;
     private TextView tv_bill;
-    private ImageView iv_btn1;
-    private ImageView iv_btn2;
-    private ConstraintLayout cl_function;
-    private View view_mask;
 
-    private boolean isBtnShow = false;
-    private AlphaAnimation showAnimation;
-    private AlphaAnimation hideAnimation;
-    private final int DURATION_TIME = 250;
+    private List<AccountBookInfo> expendList;
+    private List<AccountBookInfo> incomeList;
+
+    private List<AccountBookInfo> bookInfoList;
+    private AccountBookInfoAdapter adapter;
+    private View view_empty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,58 +69,74 @@ public class MainActivity extends BaseActivity {
         initClick();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
+    }
+
     private void initView() {
-        tv_app_name = findViewById(R.id.tv_app_name);
+        daoSession = ((ExampleApplication) getApplication()).getDaoSession();
+
         iv_more = findViewById(R.id.iv_more);
         tv_surplus = findViewById(R.id.tv_surplus);
-        tv_month = findViewById(R.id.tv_month);
         tv_expense_money = findViewById(R.id.tv_expense_money);
         tv_expense_count = findViewById(R.id.tv_expense_count);
-        view_line = findViewById(R.id.view_line);
         tv_income_money = findViewById(R.id.tv_income_money);
         tv_income_count = findViewById(R.id.tv_income_count);
-        cl_top = findViewById(R.id.cl_top);
         rv_list = findViewById(R.id.rv_list);
-        iv_empty = findViewById(R.id.iv_empty);
         iv_add_expense = findViewById(R.id.iv_add_expense);
+        view_empty = findViewById(R.id.view_empty);
 
-        dialogView = LayoutInflater.from(context).inflate(R.layout.home_dialog_view, null);
-        tv_expend_cate = dialogView.findViewById(R.id.tv_expend_cate);
-        tv_income_cate = dialogView.findViewById(R.id.tv_income_cate);
-        tv_wallet_account = dialogView.findViewById(R.id.tv_wallet_account);
-        tv_bill = dialogView.findViewById(R.id.tv_bill);
-        iv_btn1 = findViewById(R.id.iv_btn1);
-        iv_btn2 = findViewById(R.id.iv_btn2);
-        cl_function = findViewById(R.id.cl_function);
-        view_mask = findViewById(R.id.view_mask);
+        dialogViewMore = LayoutInflater.from(context).inflate(R.layout.home_dialog_view, null);
+        dialogViewChoose = LayoutInflater.from(context).inflate(R.layout.home_choose_dialog_view, null);
+        ll_add_expend = dialogViewChoose.findViewById(R.id.ll_add_expend);
+        ll_add_income = dialogViewChoose.findViewById(R.id.ll_add_income);
 
-        cl_function.setVisibility(View.INVISIBLE);
+        tv_expend_cate = dialogViewMore.findViewById(R.id.tv_expend_cate);
+        tv_income_cate = dialogViewMore.findViewById(R.id.tv_income_cate);
+        tv_wallet_account = dialogViewMore.findViewById(R.id.tv_wallet_account);
+        tv_bill = dialogViewMore.findViewById(R.id.tv_bill);
 
+        expendList = new ArrayList<>();
+        incomeList = new ArrayList<>();
+
+        bookInfoList = new ArrayList<>();
+        adapter = new AccountBookInfoAdapter(context, bookInfoList);
+        rv_list.setLayoutManager(new LinearLayoutManager(context));
+        rv_list.addItemDecoration(new MyDividerItemDecoration(context,
+                LinearLayoutManager.HORIZONTAL, 1, ContextCompat.getColor(context, R.color.line)));
+        rv_list.setAdapter(adapter);
+    }
+
+    private void initData() {
+        getAccountBookInfo();
+        getBookBaseInfo();
     }
 
     private void initClick() {
         //更多
         iv_more.setOnClickListener(v -> {
-            if (dialog == null) {
-                dialog = new CustomDialog(context);
+            if (dialogMore == null) {
+                dialogMore = new CustomDialog(context, 0, Gravity.CENTER);
             }
-            dialog.setContentView(dialogView);
-            dialog.setCancelable(true);
-            dialog.show();
+            dialogMore.setContentView(dialogViewMore);
+            dialogMore.setCancelable(true);
+            dialogMore.show();
         });
 
         //支出分类
         tv_expend_cate.setOnClickListener(v -> {
             Intent intent = new Intent(context, ExpendCateManagerActivity.class);
             startActivity(intent);
-            dialog.dismiss();
+            dialogMore.dismiss();
         });
 
         //收入分类
         tv_income_cate.setOnClickListener(v -> {
             Intent intent = new Intent(context, IncomeCateManagerActivity.class);
             startActivity(intent);
-            dialog.dismiss();
+            dialogMore.dismiss();
         });
 
         //钱包账户
@@ -115,104 +146,71 @@ public class MainActivity extends BaseActivity {
 
         //年账单
         tv_bill.setOnClickListener(v -> {
-
+            ToastUtil.showShortToast(context, "账单功能研发中...");
         });
 
-        //添加
+        //添加收支
         iv_add_expense.setOnClickListener(v -> {
 
-            if (isBtnShow) {
-                //隐藏
-                setHideAnimation(cl_function, DURATION_TIME);
-
-            } else {
-                //显示
-                setShowAnimation(cl_function, DURATION_TIME);
-
+            if (dialogChoose == null) {
+                dialogChoose = new CustomDialog(context, R.style.pop_win_anim_style, Gravity.BOTTOM);
             }
+            dialogChoose.setContentView(dialogViewChoose);
+            dialogChoose.setCancelable(true);
+            dialogChoose.show();
         });
 
-        view_mask.setOnClickListener(v -> setHideAnimation(cl_function, DURATION_TIME));
-
-        iv_btn1.setOnClickListener(v -> {
-            setHideAnimation(cl_function, DURATION_TIME);
+        ll_add_expend.setOnClickListener(v -> {
             Intent intent = new Intent(context, AddAccountBookActivity.class);
             intent.putExtra("bookType", 0);
             startActivity(intent);
+            dialogChoose.dismiss();
         });
 
-        iv_btn2.setOnClickListener(v -> {
-            setHideAnimation(cl_function, DURATION_TIME);
+        ll_add_income.setOnClickListener(v -> {
             Intent intent = new Intent(context, AddAccountBookActivity.class);
             intent.putExtra("bookType", 1);
             startActivity(intent);
+            dialogChoose.dismiss();
         });
     }
 
-    public void setHideAnimation(final View view, int duration) {
-        if (null == view || duration < 0) {
-            return;
+    private void getAccountBookInfo() {
+        bookInfoList.clear();
+        bookInfoList.addAll(daoSession.queryRaw(AccountBookInfo.class, "order by TIME_STR desc"));
+
+        if (bookInfoList == null || bookInfoList.size() == 0) {
+            view_empty.setVisibility(View.VISIBLE);
+            rv_list.setVisibility(View.GONE);
+        } else {
+            view_empty.setVisibility(View.GONE);
+            rv_list.setVisibility(View.VISIBLE);
+            adapter.notifyDataSetChanged();
         }
-
-        if (null != hideAnimation) {
-            hideAnimation.cancel();
-        }
-        view_mask.setVisibility(View.GONE);
-        isBtnShow = false;
-        // 监听动画结束的操作
-        hideAnimation = new AlphaAnimation(1.0f, 0.0f);
-        hideAnimation.setDuration(duration);
-        hideAnimation.setFillAfter(true);
-        hideAnimation.setAnimationListener(new Animation.AnimationListener() {
-
-            @Override
-            public void onAnimationStart(Animation arg0) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation arg0) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation arg0) {
-                view.setVisibility(View.GONE);
-            }
-        });
-        view.startAnimation(hideAnimation);
     }
 
-    public void setShowAnimation(final View view, int duration) {
-        if (null == view || duration < 0) {
-            return;
+    private void getBookBaseInfo() {
+        expendList.clear();
+        incomeList.clear();
+        expendList.addAll(daoSession.queryRaw(AccountBookInfo.class, "where BOOK_TYPE = ?", "0"));
+        incomeList.addAll(daoSession.queryRaw(AccountBookInfo.class, "where BOOK_TYPE = ?", "1"));
+
+        double expendMoneyTotal = 0;
+        tv_expense_count.setText(String.format("%s笔支出", expendList.size()));
+        for (int i = 0; i < expendList.size(); i++) {
+            expendMoneyTotal += expendList.get(i).getMoney();
         }
-        if (null != showAnimation) {
-            showAnimation.cancel();
+        tv_expense_money.setText(String.format("%s元", String.valueOf(expendMoneyTotal)));
+
+        double incomeMoneyTotal = 0;
+        tv_income_count.setText(String.format("%s笔收入", incomeList.size()));
+        for (int i = 0; i < incomeList.size(); i++) {
+            incomeMoneyTotal += incomeList.get(i).getMoney();
         }
-        view_mask.setVisibility(View.VISIBLE);
-        isBtnShow = true;
-        showAnimation = new AlphaAnimation(0.0f, 1.0f);
-        showAnimation.setDuration(duration);
-        showAnimation.setFillAfter(true);
-        showAnimation.setAnimationListener(new Animation.AnimationListener() {
+        tv_income_money.setText(String.format("%s元", incomeMoneyTotal));
 
-            @Override
-            public void onAnimationStart(Animation arg0) {
-                view.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation arg0) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation arg0) {
-
-            }
-        });
-        view.startAnimation(showAnimation);
+        double surplus = incomeMoneyTotal - expendMoneyTotal;
+        tv_surplus.setText(String.format("%s元", surplus));
     }
 
     @Override

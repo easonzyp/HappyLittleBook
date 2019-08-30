@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mainColor">
@@ -8,7 +9,8 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/cl_top"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="200dp"
+        android:layout_marginTop="5dp">
 
         <TextView
             android:id="@+id/tv_app_name"
@@ -16,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
-            android:text="欢乐小账本"
+            android:text="@string/app_name"
             android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -39,7 +41,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
             android:background="@color/white"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@id/tv_app_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_app_name" />
@@ -47,38 +49,40 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:gravity="center"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/ll_home_expend"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_app_name">
+            app:layout_constraintTop_toBottomOf="@+id/tv_app_name">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="结余"
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/tv_surplus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="8458.00元"
                 android:textColor="@color/white"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                tools:text="8458.00元" />
 
-            <TextView
-                android:id="@+id/tv_month"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="八月结余"
-                android:textColor="@color/white" />
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_home_expend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="5dp"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/view_line"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/view_line"
-            app:layout_constraintStart_toStartOf="@id/view_line">
+            app:layout_constraintStart_toStartOf="parent">
 
             <TextView
                 android:id="@+id/tv_expense_money"
@@ -101,23 +105,26 @@
 
         <View
             android:id="@+id/view_line"
-            android:layout_width="100dp"
-            android:layout_height="0.5dp"
-            android:layout_marginEnd="20dp"
+            android:layout_width="0.5dp"
+            android:layout_height="30dp"
             android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/ll_home_expend"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_app_name" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ll_home_expend" />
+
 
         <LinearLayout
+            android:id="@+id/ll_home_income"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="@id/view_line"
-            app:layout_constraintStart_toStartOf="@id/view_line"
-            app:layout_constraintTop_toBottomOf="@+id/view_line">
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/view_line">
 
             <TextView
                 android:id="@+id/tv_income_money"
@@ -150,7 +157,9 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
             android:visibility="gone" />
 
         <include
@@ -158,78 +167,18 @@
             layout="@layout/empty_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true" />
+            android:layout_centerInParent="true"
+            android:visibility="visible" />
 
     </RelativeLayout>
-
-    <View
-        android:id="@+id/view_mask"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:background="@color/hometopcolor"/>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/cl_function"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/iv_add_expense"
-        android:layout_alignEnd="@+id/iv_add_expense"
-        android:layout_marginBottom="5dp"
-        android:layout_marginEnd="8dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/text_view_bg"
-            android:text="添加支出"
-            android:textColor="@color/maintextcolor"
-            app:layout_constraintBottom_toTopOf="@+id/iv_btn1"
-            app:layout_constraintEnd_toStartOf="@id/iv_btn1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_btn1" />
-
-        <ImageView
-            android:id="@+id/iv_btn1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="3dp"
-            android:background="@drawable/add_expend_btn_bg"
-            android:padding="16dp"
-            android:src="@drawable/add_ic"
-            app:layout_constraintBottom_toTopOf="@+id/iv_btn2"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/text_view_bg"
-            android:text="添加收入"
-            android:textColor="@color/maintextcolor"
-            app:layout_constraintBottom_toTopOf="@+id/iv_btn2"
-            app:layout_constraintEnd_toStartOf="@id/iv_btn2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_btn2" />
-
-        <ImageView
-            android:id="@+id/iv_btn2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/add_income_btn_bg"
-            android:padding="16dp"
-            android:src="@drawable/add_ic"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-    </android.support.constraint.ConstraintLayout>
 
     <ImageView
         android:id="@+id/iv_add_expense"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/btn_shadow_bg"
         android:contentDescription="@string/app_name"
         android:padding="25dp"

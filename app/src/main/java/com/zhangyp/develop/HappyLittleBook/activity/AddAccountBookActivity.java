@@ -157,13 +157,7 @@ public class AddAccountBookActivity extends BaseActivity {
             }
 
             AccountBookInfo bookInfo = new AccountBookInfo();
-            if (bookType == 0) {
-                //支出
-                bookInfo.setMoney(-Double.valueOf(money));
-            } else {
-                //收入
-                bookInfo.setMoney(Double.valueOf(money));
-            }
+            bookInfo.setMoney(Double.valueOf(money));
             bookInfo.setMoney(Double.valueOf(money));
             bookInfo.setTimeStr(tv_time.getText().toString());
             String note = et_note.getText().toString().trim();

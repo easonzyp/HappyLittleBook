@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -214,7 +215,7 @@ public class IncomeCateManagerActivity extends BaseActivity {
 
     private void showDialog() {
         if (dialog == null) {
-            dialog = new CustomDialog(context);
+            dialog = new CustomDialog(context, 0, Gravity.CENTER);
         }
         dialog.setContentView(add_one_cate_view);
         dialog.setCancelable(true);

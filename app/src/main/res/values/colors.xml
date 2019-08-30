@@ -155,4 +155,7 @@
     <color name="darkblue">#00008b</color>
     <color name="navy">#000080</color>
     <color name="translucentSecondColor">#50a1eeff</color>
+
+    <color name="color1">#fff8f8</color>
+    <color name="color2">#f6fff6</color>
 </resources>
