@@ -84,7 +84,7 @@ public class IncomeCateManagerActivity extends BaseActivity {
         rl_cate_top = findViewById(R.id.rl_cate_top);
         rv_two_cate = findViewById(R.id.rv_two_cate);
 
-        add_one_cate_view = LayoutInflater.from(context).inflate(R.layout.add_cate_view, null);
+        add_one_cate_view = LayoutInflater.from(context).inflate(R.layout.add_cate_dialog_view, null);
         tv_title = add_one_cate_view.findViewById(R.id.tv_title);
         et_cate = add_one_cate_view.findViewById(R.id.et_cate);
         tv_delete = add_one_cate_view.findViewById(R.id.tv_delete);
@@ -114,18 +114,14 @@ public class IncomeCateManagerActivity extends BaseActivity {
         getOneCateList();
 
         if (oneCateList != null && oneCateList.size() > 0) {
-            oneCateId = oneCateList.get(0).getId();
-            getTwoCateList(oneCateId);
+            chooseOneCateItem(0);
         }
     }
 
     private void initClick() {
         lv_one_cate.setOnItemClickListener((parent, view, position, id) -> {
             if (position < oneCateAdapter.getCount()) {
-                IncomeLevelOneCate oneCate = oneCateAdapter.getItem(position);
-                oneCateId = oneCate.getId();
-                oneCateAdapter.changeState(position);
-                getTwoCateList(oneCateId);
+                chooseOneCateItem(position);
             } else {
                 showDialogType = ADD_CATE_TYPE_ONE;
                 tv_title.setText("添加一级分类");
@@ -141,7 +137,7 @@ public class IncomeCateManagerActivity extends BaseActivity {
             }
             showDialogType = MODIFY_CATE_TYPE_ONE;
             tv_title.setText("编辑一级分类");
-            oneCate = oneCateAdapter.getItem(position);
+            chooseOneCateItem(position);
             et_cate.setText(oneCate.getCateName());
             setDialogBtnIsShow();
             showDialog();
@@ -186,15 +182,30 @@ public class IncomeCateManagerActivity extends BaseActivity {
                 return;
             }
             if (showDialogType == ADD_CATE_TYPE_ONE) {
+                //添加一级分类
                 addOneCate(cateName);
-            } else {
+            } else if (showDialogType == ADD_CATE_TYPE_TWO) {
+                //添加二级分类
                 addTwoCate(cateName);
+            } else if (showDialogType == MODIFY_CATE_TYPE_ONE) {
+                //编辑一级分类
+                modifyOneCate(oneCate, cateName);
+            } else if (showDialogType == MODIFY_CATE_TYPE_TWO) {
+                //编辑二级分类
+                modifyTwoCate(twoCate, cateName);
             }
 
             dialog.dismiss();
         });
 
         tv_back.setOnClickListener(v -> finish());
+    }
+
+    private void chooseOneCateItem(int position) {
+        oneCate = oneCateAdapter.getItem(position);
+        oneCateId = oneCate.getId();
+        oneCateAdapter.changeState(position);
+        getTwoCateList(oneCateId);
     }
 
     private void getOneCateList() {
@@ -235,11 +246,31 @@ public class IncomeCateManagerActivity extends BaseActivity {
         getTwoCateList(oneCateId);
     }
 
+    private void modifyOneCate(IncomeLevelOneCate oneCate, String cateName) {
+        oneCate.setCateName(cateName);
+        daoSession.update(oneCate);
+        et_cate.setText("");
+        //重新获取一遍列表之后展示
+        getOneCateList();
+
+        oneCateId = oneCate.getId();
+        getTwoCateList(oneCateId);
+    }
+
     private void addTwoCate(String cateName) {
         IncomeLevelTwoCate oneCate = new IncomeLevelTwoCate();
         oneCate.setOneCateId(oneCateId);
         oneCate.setCateName(cateName);
         daoSession.insert(oneCate);
+        et_cate.setText("");
+        //重新获取一遍列表之后展示
+        getTwoCateList(oneCateId);
+    }
+
+    private void modifyTwoCate(IncomeLevelTwoCate twoCate, String cateName) {
+        twoCate.setOneCateId(oneCateId);
+        twoCate.setCateName(cateName);
+        daoSession.update(twoCate);
         et_cate.setText("");
         //重新获取一遍列表之后展示
         getTwoCateList(oneCateId);

@@ -4,15 +4,12 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zhangyp.develop.HappyLittleBook.ExampleApplication;
@@ -23,7 +20,6 @@ import com.zhangyp.develop.HappyLittleBook.base.BaseActivity;
 import com.zhangyp.develop.HappyLittleBook.bean.ExpendLevelOneCate;
 import com.zhangyp.develop.HappyLittleBook.bean.ExpendLevelTwoCate;
 import com.zhangyp.develop.HappyLittleBook.db.DaoSession;
-import com.zhangyp.develop.HappyLittleBook.listener.OnItemClickListener;
 import com.zhangyp.develop.HappyLittleBook.util.ToastUtil;
 import com.zhangyp.develop.HappyLittleBook.wight.CustomDialog;
 
@@ -41,13 +37,9 @@ public class ExpendCateManagerActivity extends BaseActivity {
     private final int MODIFY_CATE_TYPE_ONE = 3;
     private final int MODIFY_CATE_TYPE_TWO = 4;
 
-    private int cateType;
-    private String title;
     private TextView tv_back;
-    private RelativeLayout rl_title;
     private TextView tv_two_cate;
     private ImageView iv_add_two_cate;
-    private RelativeLayout rl_cate_top;
 
     private ListView lv_one_cate;
     private ExpendLevelOneCateAdapter oneCateAdapter;
@@ -80,14 +72,12 @@ public class ExpendCateManagerActivity extends BaseActivity {
         daoSession = ((ExampleApplication) getApplication()).getDaoSession();
 
         tv_back = findViewById(R.id.tv_back);
-        rl_title = findViewById(R.id.rl_title);
         lv_one_cate = findViewById(R.id.lv_one_cate);
         tv_two_cate = findViewById(R.id.tv_two_cate);
         iv_add_two_cate = findViewById(R.id.iv_add_two_cate);
-        rl_cate_top = findViewById(R.id.rl_cate_top);
         rv_two_cate = findViewById(R.id.rv_two_cate);
 
-        add_one_cate_view = LayoutInflater.from(context).inflate(R.layout.add_cate_view, null);
+        add_one_cate_view = LayoutInflater.from(context).inflate(R.layout.add_cate_dialog_view, null);
         tv_title = add_one_cate_view.findViewById(R.id.tv_title);
         et_cate = add_one_cate_view.findViewById(R.id.et_cate);
         tv_delete = add_one_cate_view.findViewById(R.id.tv_delete);
@@ -101,7 +91,6 @@ public class ExpendCateManagerActivity extends BaseActivity {
         /*rv_one_cate.setLayoutManager(new LinearLayoutManager(context));
         rv_one_cate.addItemDecoration(new MyDividerItemDecoration(context, MyDividerItemDecoration.HORIZONTAL_LIST,
                 1, ContextCompat.getColor(context, R.color.line)));*/
-        lv_one_cate.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         lv_one_cate.setAdapter(oneCateAdapter);
         lv_one_cate.addFooterView(LayoutInflater.from(context).inflate(R.layout.one_cate_add_view, null));
 
@@ -110,7 +99,6 @@ public class ExpendCateManagerActivity extends BaseActivity {
         rv_two_cate.setLayoutManager(new GridLayoutManager(context, 3));
         rv_two_cate.setAdapter(twoCateAdapter);
 
-
     }
 
     private void initData() {
@@ -118,18 +106,14 @@ public class ExpendCateManagerActivity extends BaseActivity {
         getOneCateList();
 
         if (oneCateList != null && oneCateList.size() > 0) {
-            oneCateId = oneCateList.get(0).getId();
-            getTwoCateList(oneCateId);
+            chooseOneCateItem(0);
         }
     }
 
     private void initClick() {
         lv_one_cate.setOnItemClickListener((parent, view, position, id) -> {
             if (position < oneCateAdapter.getCount()) {
-                ExpendLevelOneCate oneCate = oneCateAdapter.getItem(position);
-                oneCateId = oneCate.getId();
-                oneCateAdapter.changeState(position);
-                getTwoCateList(oneCateId);
+                chooseOneCateItem(position);
             } else {
                 showDialogType = ADD_CATE_TYPE_ONE;
                 tv_title.setText("添加一级分类");
@@ -145,7 +129,7 @@ public class ExpendCateManagerActivity extends BaseActivity {
             }
             showDialogType = MODIFY_CATE_TYPE_ONE;
             tv_title.setText("编辑一级分类");
-            oneCate = oneCateAdapter.getItem(position);
+            chooseOneCateItem(position);
             et_cate.setText(oneCate.getCateName());
             setDialogBtnIsShow();
             showDialog();
@@ -190,15 +174,30 @@ public class ExpendCateManagerActivity extends BaseActivity {
                 return;
             }
             if (showDialogType == ADD_CATE_TYPE_ONE) {
+                //添加一级分类
                 addOneCate(cateName);
-            } else {
+            } else if (showDialogType == ADD_CATE_TYPE_TWO) {
+                //添加二级分类
                 addTwoCate(cateName);
+            } else if (showDialogType == MODIFY_CATE_TYPE_ONE) {
+                //编辑一级分类
+                modifyOneCate(oneCate, cateName);
+            } else if (showDialogType == MODIFY_CATE_TYPE_TWO) {
+                //编辑二级分类
+                modifyTwoCate(twoCate,cateName);
             }
 
             dialog.dismiss();
         });
 
         tv_back.setOnClickListener(v -> finish());
+    }
+
+    private void chooseOneCateItem(int position) {
+        oneCate = oneCateAdapter.getItem(position);
+        oneCateId = oneCate.getId();
+        oneCateAdapter.changeState(position);
+        getTwoCateList(oneCateId);
     }
 
     private void getOneCateList() {
@@ -219,7 +218,7 @@ public class ExpendCateManagerActivity extends BaseActivity {
 
     private void showDialog() {
         if (dialog == null) {
-            dialog = new CustomDialog(context,0, Gravity.CENTER);
+            dialog = new CustomDialog(context, 0, Gravity.CENTER);
         }
         dialog.setContentView(add_one_cate_view);
         dialog.setCancelable(true);
@@ -229,14 +228,26 @@ public class ExpendCateManagerActivity extends BaseActivity {
     private void addOneCate(String cateName) {
         ExpendLevelOneCate oneCate = new ExpendLevelOneCate();
         oneCate.setCateName(cateName);
-        daoSession.insertOrReplace(oneCate);
+        daoSession.insert(oneCate);
+        et_cate.setText("");
+
+        //重新获取一遍列表之后展示
+        getOneCateList();
+
+        int position = oneCateList.size() - 1;
+        oneCateAdapter.changeState(position);
+        oneCateId = oneCateList.get(position).getId();
+        getTwoCateList(oneCateId);
+    }
+
+    private void modifyOneCate(ExpendLevelOneCate oneCate, String cateName) {
+        oneCate.setCateName(cateName);
+        daoSession.update(oneCate);
         et_cate.setText("");
         //重新获取一遍列表之后展示
         getOneCateList();
 
-        int position = oneCateList.size()-1;
-        oneCateAdapter.changeState(position);
-        oneCateId = oneCateList.get(position).getId();
+        oneCateId = oneCate.getId();
         getTwoCateList(oneCateId);
     }
 
@@ -245,6 +256,16 @@ public class ExpendCateManagerActivity extends BaseActivity {
         oneCate.setOneCateId(oneCateId);
         oneCate.setCateName(cateName);
         daoSession.insert(oneCate);
+        et_cate.setText("");
+        //重新获取一遍列表之后展示
+        getTwoCateList(oneCateId);
+    }
+
+    private void modifyTwoCate(ExpendLevelTwoCate twoCate,String cateName) {
+
+        twoCate.setOneCateId(oneCateId);
+        twoCate.setCateName(cateName);
+        daoSession.update(twoCate);
         et_cate.setText("");
         //重新获取一遍列表之后展示
         getTwoCateList(oneCateId);
@@ -265,7 +286,6 @@ public class ExpendCateManagerActivity extends BaseActivity {
     }
 
     private void deleteTwoCate(ExpendLevelTwoCate twoCate) {
-
         et_cate.setText("");
         daoSession.delete(twoCate);
         //重新获取一遍列表之后展示

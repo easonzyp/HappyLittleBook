@@ -2,15 +2,12 @@ package com.zhangyp.develop.HappyLittleBook.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,7 +21,6 @@ import com.zhangyp.develop.HappyLittleBook.db.DaoSession;
 import com.zhangyp.develop.HappyLittleBook.util.MyDividerItemDecoration;
 import com.zhangyp.develop.HappyLittleBook.util.ToastUtil;
 import com.zhangyp.develop.HappyLittleBook.wight.CustomDialog;
-import com.zhangyp.develop.HappyLittleBook.wight.HomeChoosePop;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +85,7 @@ public class MainActivity extends BaseActivity {
         view_empty = findViewById(R.id.view_empty);
 
         dialogViewMore = LayoutInflater.from(context).inflate(R.layout.home_dialog_view, null);
-        dialogViewChoose = LayoutInflater.from(context).inflate(R.layout.home_choose_dialog_view, null);
+        dialogViewChoose = LayoutInflater.from(context).inflate(R.layout.home_bottom_dialog_view, null);
         ll_add_expend = dialogViewChoose.findViewById(R.id.ll_add_expend);
         ll_add_income = dialogViewChoose.findViewById(R.id.ll_add_income);
 
@@ -141,7 +137,9 @@ public class MainActivity extends BaseActivity {
 
         //钱包账户
         tv_wallet_account.setOnClickListener(v -> {
-
+            Intent intent = new Intent(context, WalletManagerActivity.class);
+            startActivity(intent);
+            dialogMore.dismiss();
         });
 
         //年账单

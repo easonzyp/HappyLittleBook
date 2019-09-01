@@ -21,20 +21,22 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
+        AccountBookInfoDao.createTable(db, ifNotExists);
         ExpendLevelOneCateDao.createTable(db, ifNotExists);
         ExpendLevelTwoCateDao.createTable(db, ifNotExists);
         IncomeLevelOneCateDao.createTable(db, ifNotExists);
         IncomeLevelTwoCateDao.createTable(db, ifNotExists);
-        AccountBookInfoDao.createTable(db, ifNotExists);
+        WalletInfoDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
+        AccountBookInfoDao.dropTable(db, ifExists);
         ExpendLevelOneCateDao.dropTable(db, ifExists);
         ExpendLevelTwoCateDao.dropTable(db, ifExists);
         IncomeLevelOneCateDao.dropTable(db, ifExists);
         IncomeLevelTwoCateDao.dropTable(db, ifExists);
-        AccountBookInfoDao.dropTable(db, ifExists);
+        WalletInfoDao.dropTable(db, ifExists);
     }
 
     /**
@@ -53,11 +55,12 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
+        registerDaoClass(AccountBookInfoDao.class);
         registerDaoClass(ExpendLevelOneCateDao.class);
         registerDaoClass(ExpendLevelTwoCateDao.class);
         registerDaoClass(IncomeLevelOneCateDao.class);
         registerDaoClass(IncomeLevelTwoCateDao.class);
-        registerDaoClass(AccountBookInfoDao.class);
+        registerDaoClass(WalletInfoDao.class);
     }
 
     public DaoSession newSession() {
