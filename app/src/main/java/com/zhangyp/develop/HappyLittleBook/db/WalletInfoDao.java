@@ -28,6 +28,7 @@ public class WalletInfoDao extends AbstractDao<WalletInfo, Long> {
         public final static Property Money = new Property(1, double.class, "money", false, "MONEY");
         public final static Property WalletName = new Property(2, String.class, "walletName", false, "WALLET_NAME");
         public final static Property AddTime = new Property(3, String.class, "addTime", false, "ADD_TIME");
+        public final static Property WalletNote = new Property(4, String.class, "walletNote", false, "WALLET_NOTE");
     }
 
 
@@ -46,7 +47,8 @@ public class WalletInfoDao extends AbstractDao<WalletInfo, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"MONEY\" REAL NOT NULL ," + // 1: money
                 "\"WALLET_NAME\" TEXT," + // 2: walletName
-                "\"ADD_TIME\" TEXT);"); // 3: addTime
+                "\"ADD_TIME\" TEXT," + // 3: addTime
+                "\"WALLET_NOTE\" TEXT);"); // 4: walletNote
     }
 
     /** Drops the underlying database table. */
@@ -74,6 +76,11 @@ public class WalletInfoDao extends AbstractDao<WalletInfo, Long> {
         if (addTime != null) {
             stmt.bindString(4, addTime);
         }
+ 
+        String walletNote = entity.getWalletNote();
+        if (walletNote != null) {
+            stmt.bindString(5, walletNote);
+        }
     }
 
     @Override
@@ -95,6 +102,11 @@ public class WalletInfoDao extends AbstractDao<WalletInfo, Long> {
         if (addTime != null) {
             stmt.bindString(4, addTime);
         }
+ 
+        String walletNote = entity.getWalletNote();
+        if (walletNote != null) {
+            stmt.bindString(5, walletNote);
+        }
     }
 
     @Override
@@ -108,7 +120,8 @@ public class WalletInfoDao extends AbstractDao<WalletInfo, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.getDouble(offset + 1), // money
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // walletName
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3) // addTime
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // addTime
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // walletNote
         );
         return entity;
     }
@@ -119,6 +132,7 @@ public class WalletInfoDao extends AbstractDao<WalletInfo, Long> {
         entity.setMoney(cursor.getDouble(offset + 1));
         entity.setWalletName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setAddTime(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setWalletNote(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
      }
     
     @Override

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
+    android:background="@color/white">
 
     <RelativeLayout
         android:id="@+id/rl_title"
@@ -16,11 +16,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:drawableStart="@drawable/back_white_ic"
             android:drawablePadding="5dp"
+            android:drawableStart="@drawable/back_white_ic"
             android:gravity="center_vertical"
             android:padding="10dp"
-            android:text="添加钱包"
+            android:text="钱包管理"
             android:textColor="@color/white"
             android:textSize="16sp" />
 
@@ -37,6 +37,17 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_wallet"
+        android:layout_below="@+id/rl_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:listitem="@layout/item_wallet_list" />
+
+    <include
+        android:id="@+id/view_empty"
+        layout="@layout/empty_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="visible" />
+</RelativeLayout>

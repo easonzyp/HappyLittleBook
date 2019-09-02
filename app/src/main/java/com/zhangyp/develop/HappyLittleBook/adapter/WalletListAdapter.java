@@ -38,24 +38,26 @@ public class WalletListAdapter extends RecyclerView.Adapter<WalletListAdapter.Vi
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-//        WalletInfo walletInfo = getItem(position);
+        WalletInfo walletInfo = getItem(position);
 
+        holder.tv_type.setText(walletInfo.getWalletName().substring(0, 1));
+        holder.tv_wallet_name.setText(walletInfo.getWalletName());
+        holder.tv_money.setText(String.format("￥%s", walletInfo.getMoney()));
         holder.itemView.setOnClickListener(v -> {
             if (listener == null) {
                 return;
             }
-//            listener.onClick(walletInfo, holder.getAdapterPosition());
+            listener.onClick(walletInfo, holder.getAdapterPosition());
         });
     }
 
     private WalletInfo getItem(int position) {
-        return null;
+        return list.get(position);
     }
 
     @Override
     public int getItemCount() {
-//        return list.size();
-        return 5;
+        return list.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

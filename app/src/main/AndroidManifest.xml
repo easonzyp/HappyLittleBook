@@ -224,6 +224,7 @@
         <activity android:name=".activity.ExpendCateManagerActivity" />
         <activity android:name=".activity.IncomeCateManagerActivity" />
         <activity android:name=".activity.WalletManagerActivity" />
+        <activity android:name=".activity.AddWalletActivity" />
 
 
         <service
