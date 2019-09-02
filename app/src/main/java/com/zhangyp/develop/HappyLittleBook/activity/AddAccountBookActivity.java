@@ -1,5 +1,6 @@
 package com.zhangyp.develop.HappyLittleBook.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.zhangyp.develop.HappyLittleBook.bean.ExpendLevelOneCate;
 import com.zhangyp.develop.HappyLittleBook.bean.ExpendLevelTwoCate;
 import com.zhangyp.develop.HappyLittleBook.bean.IncomeLevelOneCate;
 import com.zhangyp.develop.HappyLittleBook.bean.IncomeLevelTwoCate;
+import com.zhangyp.develop.HappyLittleBook.bean.WalletInfo;
 import com.zhangyp.develop.HappyLittleBook.db.DaoSession;
 import com.zhangyp.develop.HappyLittleBook.util.BasisTimesUtils;
 import com.zhangyp.develop.HappyLittleBook.util.ToastUtil;
@@ -31,12 +33,22 @@ public class AddAccountBookActivity extends BaseActivity {
     private EditText et_money;
     private TextView tv_time;
     private EditText et_note;
+    private TextView tv_wallet_tips;
+    private TextView tv_wallet_manager;
+    private TextView tv_cate_tips;
+    private TextView tv_cate_manager;
+    private WarpLinearLayout wll_wallet;
+    private LinearLayout ll_cate_main;
     private WarpLinearLayout wll_one_cate;
     private WarpLinearLayout wll_two_cate;
     private LinearLayout ll_two_cate;
     private TextView tv_save;
 
     private String timeStr;
+
+    private List<WalletInfo> walletInfoList;
+    private List<String> walletNameList;
+    private String walletName;
 
     private List<ExpendLevelOneCate> expendOneCateList;
     private List<IncomeLevelOneCate> incomeOneCateList;
@@ -57,8 +69,13 @@ public class AddAccountBookActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         initIntentData();
         initView();
-        initData();
         initClick();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
     }
 
     private void initIntentData() {
@@ -68,17 +85,25 @@ public class AddAccountBookActivity extends BaseActivity {
     private void initView() {
         daoSession = ((ExampleApplication) getApplication()).getDaoSession();
 
-        oneCateNameList = new ArrayList<>();
-        twoCateNameList = new ArrayList<>();
         tv_back = findViewById(R.id.tv_back);
         et_money = findViewById(R.id.et_money);
         tv_time = findViewById(R.id.tv_time);
         et_note = findViewById(R.id.et_note);
+        tv_wallet_tips = findViewById(R.id.tv_wallet_tips);
+        tv_wallet_manager = findViewById(R.id.tv_wallet_manager);
+        tv_cate_tips = findViewById(R.id.tv_cate_tips);
+        tv_cate_manager = findViewById(R.id.tv_cate_manager);
+        wll_wallet = findViewById(R.id.wll_wallet);
+        ll_cate_main = findViewById(R.id.ll_cate_main);
         wll_one_cate = findViewById(R.id.wll_one_cate);
         wll_two_cate = findViewById(R.id.wll_two_cate);
         ll_two_cate = findViewById(R.id.ll_two_cate);
         tv_save = findViewById(R.id.tv_save);
 
+        walletInfoList = new ArrayList<>();
+        walletNameList = new ArrayList<>();
+        oneCateNameList = new ArrayList<>();
+        twoCateNameList = new ArrayList<>();
         if (bookType == 0) {
             tv_back.setText("添加支出");
             expendOneCateList = new ArrayList<>();
@@ -93,6 +118,7 @@ public class AddAccountBookActivity extends BaseActivity {
     }
 
     private void initData() {
+        getWalletList();
         if (bookType == 0) {
             getExpendOneCateList();
         } else {
@@ -102,6 +128,10 @@ public class AddAccountBookActivity extends BaseActivity {
 
     private void initClick() {
         tv_back.setOnClickListener(v -> finish());
+
+        wll_wallet.setMarkClickListener((text, position) -> walletName = text);
+
+        tv_wallet_manager.setOnClickListener(v -> startActivity(new Intent(context, AddWalletActivity.class)));
 
         wll_one_cate.setMarkClickListener((text, position) -> {
             if (bookType == 0) {
@@ -121,6 +151,16 @@ public class AddAccountBookActivity extends BaseActivity {
             }
         });
 
+        tv_cate_manager.setOnClickListener(v -> {
+            if (bookType == 0) {
+                //跳转到添加支出
+                startActivity(new Intent(context, ExpendCateManagerActivity.class));
+            } else {
+                //跳转到添加收入
+                startActivity(new Intent(context, IncomeCateManagerActivity.class));
+            }
+        });
+
         tv_time.setOnClickListener(v -> showDateView());
 
         tv_save.setOnClickListener(v -> {
@@ -129,6 +169,12 @@ public class AddAccountBookActivity extends BaseActivity {
                 ToastUtil.showShortToast(context, "请填写支出金额");
                 return;
             }
+
+            if (TextUtils.isEmpty(walletName)) {
+                ToastUtil.showShortToast(context, "请选择钱包");
+                return;
+            }
+
             if (bookType == 0) {
                 if (expendTwoCate == null && expendOneCate == null) {
                     ToastUtil.showShortToast(context, "请选择支出分类");
@@ -167,7 +213,7 @@ public class AddAccountBookActivity extends BaseActivity {
                 bookInfo.setNoteStr(note);
             }
             bookInfo.setCateStr(cateName);
-            bookInfo.setWalletType("现金");
+            bookInfo.setWalletType(walletName);
             bookInfo.setBookType(bookType);
 
             daoSession.insert(bookInfo);
@@ -176,30 +222,60 @@ public class AddAccountBookActivity extends BaseActivity {
         });
     }
 
+    private void getWalletList() {
+        walletName = null;
+        walletInfoList.clear();
+        walletNameList.clear();
+        walletInfoList.addAll(daoSession.loadAll(WalletInfo.class));
+        if (walletInfoList.size() == 0) {
+            tv_wallet_tips.setVisibility(View.VISIBLE);
+            wll_wallet.setVisibility(View.GONE);
+            return;
+        }
+        tv_wallet_tips.setVisibility(View.GONE);
+        wll_wallet.setVisibility(View.VISIBLE);
+        for (int i = 0; i < walletInfoList.size(); i++) {
+            walletNameList.add(walletInfoList.get(i).getWalletName());
+        }
+        wll_wallet.setData(walletNameList, context, 13, 10, 5, 10, 5, 0, 5, 10, 5);
+    }
+
     private void getExpendOneCateList() {
+        expendOneCate = null;
         expendOneCateList.clear();
         oneCateNameList.clear();
         expendOneCateList.addAll(daoSession.loadAll(ExpendLevelOneCate.class));
-        if (expendOneCateList == null || expendOneCateList.size() == 0) {
+        if (expendOneCateList.size() == 0) {
+            tv_cate_tips.setVisibility(View.VISIBLE);
+            ll_cate_main.setVisibility(View.GONE);
             return;
         }
+        tv_cate_tips.setVisibility(View.GONE);
+        ll_cate_main.setVisibility(View.VISIBLE);
         for (int i = 0; i < expendOneCateList.size(); i++) {
             oneCateNameList.add(expendOneCateList.get(i).getCateName());
         }
         wll_one_cate.setData(oneCateNameList, context, 13, 10, 5, 10, 5, 0, 5, 10, 5);
+        getExpendTwoCateList(-1);
     }
 
     private void getIncomeOneCateList() {
+        incomeOneCate = null;
         incomeOneCateList.clear();
         oneCateNameList.clear();
         incomeOneCateList.addAll(daoSession.loadAll(IncomeLevelOneCate.class));
-        if (incomeOneCateList == null || incomeOneCateList.size() == 0) {
+        if (incomeOneCateList.size() == 0) {
+            tv_cate_tips.setVisibility(View.VISIBLE);
+            ll_cate_main.setVisibility(View.GONE);
             return;
         }
+        tv_cate_tips.setVisibility(View.GONE);
+        ll_cate_main.setVisibility(View.VISIBLE);
         for (int i = 0; i < incomeOneCateList.size(); i++) {
             oneCateNameList.add(incomeOneCateList.get(i).getCateName());
         }
         wll_one_cate.setData(oneCateNameList, context, 13, 10, 5, 10, 5, 0, 5, 10, 5);
+        getIncomeTwoCateList(-1);
     }
 
     private void getExpendTwoCateList(long oneCateId) {
@@ -207,7 +283,7 @@ public class AddAccountBookActivity extends BaseActivity {
         expendTwoCateList.clear();
         twoCateNameList.clear();
         expendTwoCateList.addAll(daoSession.queryRaw(ExpendLevelTwoCate.class, "where ONE_CATE_ID = ?", String.valueOf(oneCateId)));
-        if (expendTwoCateList == null || expendTwoCateList.size() == 0) {
+        if (expendTwoCateList.size() == 0) {
             ll_two_cate.setVisibility(View.GONE);
             return;
         }
@@ -223,7 +299,7 @@ public class AddAccountBookActivity extends BaseActivity {
         incomeTwoCateList.clear();
         twoCateNameList.clear();
         incomeTwoCateList.addAll(daoSession.queryRaw(IncomeLevelTwoCate.class, "where ONE_CATE_ID = ?", String.valueOf(oneCateId)));
-        if (incomeTwoCateList == null || incomeTwoCateList.size() == 0) {
+        if (incomeTwoCateList.size() == 0) {
             ll_two_cate.setVisibility(View.GONE);
             return;
         }

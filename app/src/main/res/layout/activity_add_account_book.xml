@@ -21,9 +21,9 @@
             android:drawableStart="@drawable/back_white_ic"
             android:gravity="center_vertical"
             android:padding="10dp"
-            tools:text="添加支出"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            tools:text="添加支出" />
     </RelativeLayout>
 
     <LinearLayout
@@ -125,10 +125,69 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="钱包"
+                android:textColor="@color/maintextcolor"
+                android:textSize="14sp" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp">
+
+                <com.zhangyp.develop.HappyLittleBook.wight.WarpLinearLayout
+                    android:id="@+id/wll_wallet"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/tv_wallet_manager"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_wallet_tips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="还未添加过钱包"
+                    android:textColor="@color/maintextcolor"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_wallet_manager"
+                    android:layout_width="45dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/manager_corner_bg"
+                    android:gravity="center"
+                    android:text="添加"
+                    android:textColor="@color/mainColor"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/line" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -137,44 +196,76 @@
                 android:textColor="@color/maintextcolor"
                 android:textSize="14sp" />
 
-            <LinearLayout
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:orientation="vertical">
-
-                <com.zhangyp.develop.HappyLittleBook.wight.WarpLinearLayout
-                    android:id="@+id/wll_one_cate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                android:layout_marginStart="15dp">
 
                 <LinearLayout
-                    android:id="@+id/ll_two_cate"
+                    android:id="@+id/ll_cate_main"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginTop="5dp"
-                        android:drawableEnd="@drawable/line_right"
-                        android:drawablePadding="10dp"
-                        android:drawableStart="@drawable/line_left"
-                        android:gravity="center_vertical"
-                        android:text="二级类别"
-                        android:textColor="@color/secondtextcolor"
-                        android:textSize="12sp" />
+                    android:layout_centerVertical="true"
+                    android:visibility="gone"
+                    android:layout_toStartOf="@+id/tv_cate_manager"
+                    android:orientation="vertical">
 
                     <com.zhangyp.develop.HappyLittleBook.wight.WarpLinearLayout
-                        android:id="@+id/wll_two_cate"
+                        android:id="@+id/wll_one_cate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_two_cate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:drawableEnd="@drawable/line_right"
+                            android:drawablePadding="10dp"
+                            android:drawableStart="@drawable/line_left"
+                            android:gravity="center_vertical"
+                            android:text="二级类别"
+                            android:textColor="@color/secondtextcolor"
+                            android:textSize="12sp" />
+
+                        <com.zhangyp.develop.HappyLittleBook.wight.WarpLinearLayout
+                            android:id="@+id/wll_two_cate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_cate_tips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/maintextcolor"
+                    android:text="还未添加过分类" />
+
+                <TextView
+                    android:id="@+id/tv_cate_manager"
+                    android:layout_width="45dp"
+                    android:layout_height="22dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/manager_corner_bg"
+                    android:gravity="center"
+                    android:text="添加"
+                    android:textColor="@color/mainColor"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
         </LinearLayout>
 
         <View
