@@ -37,6 +37,8 @@ public class MainActivity extends BaseActivity {
     private TextView tv_income_count;
     private RecyclerView rv_list;
     private ImageView iv_add_expense;
+    private LinearLayout ll_home_expend;
+    private LinearLayout ll_home_income;
 
     private CustomDialog dialogMore;
     private View dialogViewMore;
@@ -82,6 +84,8 @@ public class MainActivity extends BaseActivity {
         tv_income_count = findViewById(R.id.tv_income_count);
         rv_list = findViewById(R.id.rv_list);
         iv_add_expense = findViewById(R.id.iv_add_expense);
+        ll_home_expend = findViewById(R.id.ll_home_expend);
+        ll_home_income = findViewById(R.id.ll_home_income);
         view_empty = findViewById(R.id.view_empty);
 
         dialogViewMore = LayoutInflater.from(context).inflate(R.layout.home_dialog_view, null);
@@ -166,6 +170,20 @@ public class MainActivity extends BaseActivity {
         });
 
         ll_add_income.setOnClickListener(v -> {
+            Intent intent = new Intent(context, AddAccountBookActivity.class);
+            intent.putExtra("bookType", 1);
+            startActivity(intent);
+            dialogChoose.dismiss();
+        });
+
+        ll_home_expend.setOnClickListener(v -> {
+            Intent intent = new Intent(context, AddAccountBookActivity.class);
+            intent.putExtra("bookType", 0);
+            startActivity(intent);
+            dialogChoose.dismiss();
+        });
+
+        ll_home_income.setOnClickListener(v -> {
             Intent intent = new Intent(context, AddAccountBookActivity.class);
             intent.putExtra("bookType", 1);
             startActivity(intent);

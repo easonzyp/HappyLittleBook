@@ -68,12 +68,7 @@ public class WalletManagerActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        iv_add_wallet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(context, AddWalletActivity.class));
-            }
-        });
+        iv_add_wallet.setOnClickListener(v -> startActivity(new Intent(context, AddWalletActivity.class)));
     }
 
     private void getWalletList() {

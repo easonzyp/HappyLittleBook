@@ -27,7 +27,7 @@
         android:layout_toEndOf="@+id/tv_type"
         android:text="微信"
         android:textColor="@color/maintextcolor"
-        android:textSize="15sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/tv_money"
