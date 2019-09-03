@@ -12,6 +12,7 @@ import android.widget.DatePicker;
 import android.widget.NumberPicker;
 import android.widget.TimePicker;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -418,5 +419,26 @@ public class BasisTimesUtils {
         void onConfirm(int hourOfDay, int minute);
 
         void onCancel();
+    }
+
+    public static String getMonthAndDay(String dateStr) {
+        if (TextUtils.isEmpty(dateStr)) {
+            return "";
+        }
+        int year = 1900;
+        int month = 1;
+        int day = 1;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 HH:mm", Locale.getDefault());
+        try {
+            Date date = format.parse(dateStr);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            year = calendar.get(Calendar.YEAR);
+            month = calendar.get(Calendar.MONTH);
+            day = calendar.get(Calendar.DAY_OF_MONTH);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return year + "年" + month + "月" + day + "日";
     }
 }

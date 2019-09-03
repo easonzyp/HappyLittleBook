@@ -4,13 +4,16 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 
+import java.io.Serializable;
+
 /**
  * Created by zyp on 2019/8/29 0029.
  * class note:
  */
 
 @Entity
-public class AccountBookInfo {
+public class AccountBookInfo implements Serializable {
+    private static final long serialVersionUID = 2794751734996848993L;
     @Id(autoincrement = true)
     Long id;
 

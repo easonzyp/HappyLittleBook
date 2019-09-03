@@ -2,8 +2,6 @@ package com.zhangyp.develop.HappyLittleBook.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -19,9 +17,10 @@ import com.zhangyp.develop.HappyLittleBook.adapter.AccountBookInfoAdapter;
 import com.zhangyp.develop.HappyLittleBook.base.BaseActivity;
 import com.zhangyp.develop.HappyLittleBook.bean.AccountBookInfo;
 import com.zhangyp.develop.HappyLittleBook.db.DaoSession;
-import com.zhangyp.develop.HappyLittleBook.util.MyDividerItemDecoration;
+import com.zhangyp.develop.HappyLittleBook.dialog.HomeBookDetailDialog;
+import com.zhangyp.develop.HappyLittleBook.listener.OnItemClickListener;
 import com.zhangyp.develop.HappyLittleBook.util.ToastUtil;
-import com.zhangyp.develop.HappyLittleBook.wight.CustomDialog;
+import com.zhangyp.develop.HappyLittleBook.dialog.CustomDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,15 +29,18 @@ public class MainActivity extends BaseActivity {
 
     private DaoSession daoSession;
 
+    private View view_main_top;
     private ImageView iv_more;
+
+    private TextView tv_app_name;
     private TextView tv_surplus;
     private TextView tv_expense_money;
     private TextView tv_expense_count;
     private TextView tv_income_money;
     private TextView tv_income_count;
     private RecyclerView rv_list;
-    private NestedScrollView nsv_empty;
-    private ImageView iv_add_expense;
+    private LinearLayout ll_empty;
+    private ImageView iv_home_add;
     private LinearLayout ll_home_expend;
     private LinearLayout ll_home_income;
 
@@ -55,12 +57,13 @@ public class MainActivity extends BaseActivity {
     private TextView tv_wallet_account;
     private TextView tv_bill;
 
+    private HomeBookDetailDialog bookDetailDialog;
+
     private List<AccountBookInfo> expendList;
     private List<AccountBookInfo> incomeList;
 
     private List<AccountBookInfo> bookInfoList;
     private AccountBookInfoAdapter adapter;
-    private View view_empty;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,18 +81,21 @@ public class MainActivity extends BaseActivity {
     private void initView() {
         daoSession = ((ExampleApplication) getApplication()).getDaoSession();
 
+        tv_app_name = findViewById(R.id.tv_app_name);
         iv_more = findViewById(R.id.iv_more);
-        tv_surplus = findViewById(R.id.tv_surplus);
-        tv_expense_money = findViewById(R.id.tv_expense_money);
-        tv_expense_count = findViewById(R.id.tv_expense_count);
-        tv_income_money = findViewById(R.id.tv_income_money);
-        tv_income_count = findViewById(R.id.tv_income_count);
+        view_main_top = findViewById(R.id.view_main_top);
+        tv_surplus = view_main_top.findViewById(R.id.tv_surplus);
+        tv_expense_money = view_main_top.findViewById(R.id.tv_expense_money);
+        tv_expense_count = view_main_top.findViewById(R.id.tv_expense_count);
+        tv_income_money = view_main_top.findViewById(R.id.tv_income_money);
+        tv_income_count = view_main_top.findViewById(R.id.tv_income_count);
+
+        ll_home_expend = view_main_top.findViewById(R.id.ll_home_expend);
+        ll_home_income = view_main_top.findViewById(R.id.ll_home_income);
+
         rv_list = findViewById(R.id.rv_list);
-        nsv_empty = findViewById(R.id.nsv_empty);
-        iv_add_expense = findViewById(R.id.iv_add_expense);
-        ll_home_expend = findViewById(R.id.ll_home_expend);
-        ll_home_income = findViewById(R.id.ll_home_income);
-        view_empty = findViewById(R.id.view_empty);
+        ll_empty = findViewById(R.id.ll_empty);
+        iv_home_add = findViewById(R.id.iv_home_add);
 
         dialogViewMore = LayoutInflater.from(context).inflate(R.layout.home_dialog_view, null);
         dialogViewChoose = LayoutInflater.from(context).inflate(R.layout.home_bottom_dialog_view, null);
@@ -107,8 +113,8 @@ public class MainActivity extends BaseActivity {
         bookInfoList = new ArrayList<>();
         adapter = new AccountBookInfoAdapter(context, bookInfoList);
         rv_list.setLayoutManager(new LinearLayoutManager(context));
-        rv_list.addItemDecoration(new MyDividerItemDecoration(context,
-                LinearLayoutManager.HORIZONTAL, 1, ContextCompat.getColor(context, R.color.line)));
+        /*rv_list.addItemDecoration(new MyDividerItemDecoration(context,
+                LinearLayoutManager.HORIZONTAL, 1, ContextCompat.getColor(context, R.color.line)));*/
         rv_list.setAdapter(adapter);
     }
 
@@ -118,6 +124,8 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initClick() {
+        tv_app_name.setOnClickListener(v -> startActivity(new Intent(context, AppInfoActivity.class)));
+
         //更多
         iv_more.setOnClickListener(v -> {
             if (dialogMore == null) {
@@ -155,7 +163,7 @@ public class MainActivity extends BaseActivity {
         });
 
         //添加收支
-        iv_add_expense.setOnClickListener(v -> {
+        iv_home_add.setOnClickListener(v -> {
 
             if (dialogChoose == null) {
                 dialogChoose = new CustomDialog(context, R.style.pop_win_anim_style, Gravity.BOTTOM);
@@ -192,6 +200,13 @@ public class MainActivity extends BaseActivity {
             startActivity(intent);
             dialogChoose.dismiss();
         });
+
+        adapter.setOnItemClickListener(new OnItemClickListener<AccountBookInfo>() {
+            @Override
+            public void onClick(AccountBookInfo bean, int position) {
+                showBookDetailDialog(bean);
+            }
+        });
     }
 
     private void getAccountBookInfo() {
@@ -199,10 +214,10 @@ public class MainActivity extends BaseActivity {
         bookInfoList.addAll(daoSession.queryRaw(AccountBookInfo.class, "order by TIME_STR desc"));
 
         if (bookInfoList == null || bookInfoList.size() == 0) {
-            nsv_empty.setVisibility(View.VISIBLE);
+            ll_empty.setVisibility(View.VISIBLE);
             rv_list.setVisibility(View.GONE);
         } else {
-            nsv_empty.setVisibility(View.GONE);
+            ll_empty.setVisibility(View.GONE);
             rv_list.setVisibility(View.VISIBLE);
             adapter.notifyDataSetChanged();
         }
@@ -230,6 +245,15 @@ public class MainActivity extends BaseActivity {
 
         double surplus = incomeMoneyTotal - expendMoneyTotal;
         tv_surplus.setText(String.format("%s元", surplus));
+    }
+
+    private void showBookDetailDialog(AccountBookInfo bean) {
+        if (bookDetailDialog == null) {
+            bookDetailDialog = new HomeBookDetailDialog(context);
+        }
+        bookDetailDialog.setCancelable(true);
+        bookDetailDialog.setData(bean);
+        bookDetailDialog.show();
     }
 
     @Override

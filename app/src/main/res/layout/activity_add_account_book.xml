@@ -172,7 +172,7 @@
                     android:background="@drawable/manager_corner_bg"
                     android:gravity="center"
                     android:text="添加"
-                    android:textColor="@color/lightblue2"
+                    android:textColor="@color/lightblue"
                     android:textSize="12sp" />
             </RelativeLayout>
 
@@ -264,7 +264,7 @@
                     android:background="@drawable/manager_corner_bg"
                     android:gravity="center"
                     android:text="添加"
-                    android:textColor="@color/lightblue2"
+                    android:textColor="@color/lightblue"
                     android:textSize="12sp" />
 
             </RelativeLayout>

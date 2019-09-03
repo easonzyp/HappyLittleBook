@@ -1,4 +1,4 @@
-package com.zhangyp.develop.HappyLittleBook.wight;
+package com.zhangyp.develop.HappyLittleBook.dialog;
 
 import android.app.Dialog;
 import android.content.Context;

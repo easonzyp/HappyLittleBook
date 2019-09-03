@@ -62,6 +62,7 @@ public class AddAccountBookActivity extends BaseActivity {
     private IncomeLevelTwoCate incomeTwoCate;
     private List<String> twoCateNameList;
 
+    private AccountBookInfo bean;
     private int bookType;   //0:支出  1:收入
 
     @Override
@@ -79,7 +80,9 @@ public class AddAccountBookActivity extends BaseActivity {
     }
 
     private void initIntentData() {
-        bookType = getIntent().getIntExtra("bookType", 0);
+        Intent intent = getIntent();
+        bean = (AccountBookInfo) intent.getSerializableExtra("bookInfo");
+        bookType = intent.getIntExtra("bookType", 0);
     }
 
     private void initView() {
@@ -208,7 +211,7 @@ public class AddAccountBookActivity extends BaseActivity {
             bookInfo.setTimeStr(tv_time.getText().toString());
             String note = et_note.getText().toString().trim();
             if (TextUtils.isEmpty(note)) {
-                bookInfo.setNoteStr("空");
+                bookInfo.setNoteStr("未添加备注");
             } else {
                 bookInfo.setNoteStr(note);
             }

@@ -7,5 +7,5 @@ package com.zhangyp.develop.HappyLittleBook.listener;
 
 public interface OnItemClickListener<T> {
 
-    void onClick(T obj, int position);
+    void onClick(T bean, int position);
 }

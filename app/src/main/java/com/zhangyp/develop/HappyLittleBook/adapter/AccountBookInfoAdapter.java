@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.zhangyp.develop.HappyLittleBook.R;
 import com.zhangyp.develop.HappyLittleBook.bean.AccountBookInfo;
 import com.zhangyp.develop.HappyLittleBook.listener.OnItemClickListener;
+import com.zhangyp.develop.HappyLittleBook.util.BasisTimesUtils;
 
 import java.util.List;
 
@@ -24,10 +25,12 @@ public class AccountBookInfoAdapter extends RecyclerView.Adapter<AccountBookInfo
     private Context context;
     private List<AccountBookInfo> list;
     private OnItemClickListener<AccountBookInfo> listener;
+    private AccountBookInfo preBookInfo;
 
     public AccountBookInfoAdapter(Context context, List<AccountBookInfo> list) {
         this.context = context;
         this.list = list;
+        preBookInfo = new AccountBookInfo();
     }
 
     @Override
@@ -38,28 +41,48 @@ public class AccountBookInfoAdapter extends RecyclerView.Adapter<AccountBookInfo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        if (position > 0) {
+            preBookInfo = getItem(position - 1);
+        }
         AccountBookInfo bookInfo = getItem(position);
-        holder.tv_type.setText(bookInfo.getWalletType().substring(0, 1));
+
         holder.tv_cate.setText(bookInfo.getCateStr());
         holder.tv_time.setText(bookInfo.getTimeStr());
         if (bookInfo.getBookType() == 0) {
+            holder.tv_type.setText("支");
+            holder.tv_type.setBackgroundResource(R.drawable.home_logo_type_corner_bg);
             holder.tv_money.setText(String.format("-%s", bookInfo.getMoney()));
-            holder.tv_money.setTextColor(ContextCompat.getColor(context, R.color.firebrick));
-//            holder.itemView.setBackground(ContextCompat.getDrawable(context, R.drawable.home_expend_corner_bg));
+            holder.tv_money.setTextColor(ContextCompat.getColor(context, R.color.red));
         } else {
+            holder.tv_type.setText("收");
+            holder.tv_type.setBackgroundResource(R.drawable.two_cate_top_corner_bg);
             holder.tv_money.setText(String.format("+%s", bookInfo.getMoney()));
-            holder.tv_money.setTextColor(ContextCompat.getColor(context, R.color.darkseagreen));
-//            holder.itemView.setBackground(ContextCompat.getDrawable(context, R.drawable.home_income_corner_bg));
+            holder.tv_money.setTextColor(ContextCompat.getColor(context, R.color.mainColor));
         }
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listener == null) {
-                    return;
-                }
-                listener.onClick(bookInfo, holder.getAdapterPosition());
+        String preTime = preBookInfo.getTimeStr();
+        String currentTime = bookInfo.getTimeStr();
+
+        String preTimeTemp = BasisTimesUtils.getMonthAndDay(preTime);
+        String currentTimeTemp = BasisTimesUtils.getMonthAndDay(currentTime);
+
+        if (position == 0) {
+            holder.tv_title_time.setVisibility(View.VISIBLE);
+            holder.tv_title_time.setText(currentTimeTemp);
+        } else {
+            if (!preTimeTemp.equals(currentTimeTemp)) {
+                holder.tv_title_time.setVisibility(View.VISIBLE);
+                holder.tv_title_time.setText(currentTimeTemp);
+            } else {
+                holder.tv_title_time.setVisibility(View.GONE);
             }
+        }
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener == null) {
+                return;
+            }
+            listener.onClick(bookInfo, holder.getAdapterPosition());
         });
     }
 
@@ -74,6 +97,7 @@ public class AccountBookInfoAdapter extends RecyclerView.Adapter<AccountBookInfo
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
+        private TextView tv_title_time;
         private TextView tv_type;
         private TextView tv_cate;
         private TextView tv_time;
@@ -81,6 +105,7 @@ public class AccountBookInfoAdapter extends RecyclerView.Adapter<AccountBookInfo
 
         ViewHolder(View itemView) {
             super(itemView);
+            tv_title_time = itemView.findViewById(R.id.tv_title_time);
             tv_type = itemView.findViewById(R.id.tv_type);
             tv_cate = itemView.findViewById(R.id.tv_cate);
             tv_time = itemView.findViewById(R.id.tv_time);

@@ -21,7 +21,7 @@ import com.zhangyp.develop.HappyLittleBook.bean.ExpendLevelOneCate;
 import com.zhangyp.develop.HappyLittleBook.bean.ExpendLevelTwoCate;
 import com.zhangyp.develop.HappyLittleBook.db.DaoSession;
 import com.zhangyp.develop.HappyLittleBook.util.ToastUtil;
-import com.zhangyp.develop.HappyLittleBook.wight.CustomDialog;
+import com.zhangyp.develop.HappyLittleBook.dialog.CustomDialog;
 
 import java.util.ArrayList;
 import java.util.List;

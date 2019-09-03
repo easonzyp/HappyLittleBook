@@ -14,7 +14,7 @@ import com.zhangyp.develop.HappyLittleBook.bean.WalletInfo;
 import com.zhangyp.develop.HappyLittleBook.db.DaoSession;
 import com.zhangyp.develop.HappyLittleBook.util.BasisTimesUtils;
 import com.zhangyp.develop.HappyLittleBook.util.ToastUtil;
-import com.zhangyp.develop.HappyLittleBook.wight.TwoButtonCenterDialog;
+import com.zhangyp.develop.HappyLittleBook.dialog.TwoButtonCenterDialog;
 
 public class AddWalletActivity extends BaseActivity {
     private DaoSession daoSession;
