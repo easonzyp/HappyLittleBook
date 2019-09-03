@@ -17,7 +17,9 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
+            android:background="?android:attr/selectableItemBackground"
             android:gravity="center_vertical"
+            android:paddingEnd="20dp"
             android:paddingStart="20dp"
             android:text="支出分类" />
 
@@ -25,7 +27,9 @@
             android:id="@+id/tv_income_cate"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:background="?android:attr/selectableItemBackground"
             android:gravity="center_vertical"
+            android:paddingEnd="20dp"
             android:paddingStart="20dp"
             android:text="收入分类" />
 
@@ -33,7 +37,9 @@
             android:id="@+id/tv_wallet_account"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:background="?android:attr/selectableItemBackground"
             android:gravity="center_vertical"
+            android:paddingEnd="20dp"
             android:paddingStart="20dp"
             android:text="钱包账户" />
 
@@ -42,7 +48,9 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="10dp"
+            android:background="?android:attr/selectableItemBackground"
             android:gravity="center_vertical"
+            android:paddingEnd="20dp"
             android:paddingStart="20dp"
             android:text="账单详情" />
     </LinearLayout>

@@ -33,37 +33,71 @@
             android:src="@drawable/more2" />
     </RelativeLayout>
 
-    <include
-        android:id="@+id/view_top"
-        layout="@layout/home_top_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/rl_title" />
-
-    <RelativeLayout
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/cl_top"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/view_top"
-        android:background="@drawable/home_page_corner_bg"
-        android:paddingTop="20dp">
+        android:layout_below="@+id/rl_title">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            app:elevation="0dp">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/collapsingToolbarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:collapsedTitleGravity="center"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <include
+                    android:id="@+id/view_top"
+                    layout="@layout/home_top_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_collapseMode="parallax" />
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+        </android.support.design.widget.AppBarLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
-            android:layout_marginStart="15dp"
-            android:visibility="gone" />
+            android:layout_height="match_parent"
+            android:background="@drawable/home_page_corner_bg"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
+            android:paddingTop="10dp"
+            android:visibility="gone"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <include
-            android:id="@+id/view_empty"
-            layout="@layout/empty_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="visible" />
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/nsv_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/home_page_corner_bg"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    </RelativeLayout>
+            <include
+                android:id="@+id/view_empty"
+                layout="@layout/empty_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp" />
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.design.widget.CoordinatorLayout>
+
+    <!--<RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/view_top"
+        android:background="@drawable/home_page_corner_bg"
+        android:paddingTop="20dp">-->
+
+    <!--</RelativeLayout>-->
 
     <ImageView
         android:id="@+id/iv_add_expense"

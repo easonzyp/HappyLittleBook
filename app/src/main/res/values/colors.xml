@@ -6,6 +6,9 @@
 
     <color name="mainColor">#96d6b1</color>
     <color name="mainSecondColor">#bbf1d1</color>
+
+    <color name="lightblue2">#8ee2ea</color>
+
     <color name="mainBg">#f2f2f2</color>
     <color name="line">#eeeeee</color>
     <color name="maintextcolor">#4d4d4d</color>
@@ -90,7 +93,6 @@
     <color name="lightsteelblue">#b0c4de</color>
     <color name="paleturquoise">#61E1FE</color>
     <color name="greenyellow">#adff2f</color>
-    <color name="lightblue">#add8e6</color>
     <color name="darkgray">#a9a9a9</color>
     <color name="brown">#a52a2a</color>
     <color name="sienna">#a0522d</color>

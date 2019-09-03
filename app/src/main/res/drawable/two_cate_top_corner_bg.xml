@@ -2,5 +2,5 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="oval">
     <!--圆角，颜色渐变-->
-    <solid android:color="@color/mainSecondColor" />
+    <solid android:color="@color/mainColor" />
 </shape>

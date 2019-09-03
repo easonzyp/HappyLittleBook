@@ -4,7 +4,7 @@
     android:id="@+id/cl_top"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="15dp"
+    android:paddingTop="20dp"
     android:paddingBottom="15dp"
     android:background="@color/mainColor">
 
@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
+        android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toTopOf="@+id/ll_home_expend"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

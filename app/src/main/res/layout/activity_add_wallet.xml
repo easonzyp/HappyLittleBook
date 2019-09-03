@@ -63,9 +63,9 @@
                 android:layout_marginStart="15dp"
                 android:background="@null"
                 android:gravity="center_vertical"
-                android:textColor="@color/maintextcolor"
                 android:hint="请填写钱包名称"
                 android:maxLines="8"
+                android:textColor="@color/maintextcolor"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -95,8 +95,8 @@
                 android:background="@null"
                 android:gravity="center_vertical"
                 android:hint="请填写钱包金额"
-                android:textColor="@color/maintextcolor"
                 android:inputType="numberDecimal"
+                android:textColor="@color/maintextcolor"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -126,6 +126,8 @@
                 android:background="@null"
                 android:gravity="center_vertical"
                 android:hint="选填"
+                android:maxLength="20"
+                android:maxLines="1"
                 android:textColor="@color/maintextcolor"
                 android:textSize="14sp" />
         </LinearLayout>

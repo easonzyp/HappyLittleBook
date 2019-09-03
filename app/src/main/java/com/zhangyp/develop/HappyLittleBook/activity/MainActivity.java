@@ -3,6 +3,7 @@ package com.zhangyp.develop.HappyLittleBook.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -36,6 +37,7 @@ public class MainActivity extends BaseActivity {
     private TextView tv_income_money;
     private TextView tv_income_count;
     private RecyclerView rv_list;
+    private NestedScrollView nsv_empty;
     private ImageView iv_add_expense;
     private LinearLayout ll_home_expend;
     private LinearLayout ll_home_income;
@@ -83,6 +85,7 @@ public class MainActivity extends BaseActivity {
         tv_income_money = findViewById(R.id.tv_income_money);
         tv_income_count = findViewById(R.id.tv_income_count);
         rv_list = findViewById(R.id.rv_list);
+        nsv_empty = findViewById(R.id.nsv_empty);
         iv_add_expense = findViewById(R.id.iv_add_expense);
         ll_home_expend = findViewById(R.id.ll_home_expend);
         ll_home_income = findViewById(R.id.ll_home_income);
@@ -196,10 +199,10 @@ public class MainActivity extends BaseActivity {
         bookInfoList.addAll(daoSession.queryRaw(AccountBookInfo.class, "order by TIME_STR desc"));
 
         if (bookInfoList == null || bookInfoList.size() == 0) {
-            view_empty.setVisibility(View.VISIBLE);
+            nsv_empty.setVisibility(View.VISIBLE);
             rv_list.setVisibility(View.GONE);
         } else {
-            view_empty.setVisibility(View.GONE);
+            nsv_empty.setVisibility(View.GONE);
             rv_list.setVisibility(View.VISIBLE);
             adapter.notifyDataSetChanged();
         }
