@@ -25,7 +25,7 @@ import com.zhangyp.develop.HappyLittleBook.wight.WarpLinearLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddAccountBookActivity extends BaseActivity {
+public class ModifyAccountBookActivity extends BaseActivity {
 
     private DaoSession daoSession;
 
@@ -62,7 +62,9 @@ public class AddAccountBookActivity extends BaseActivity {
     private IncomeLevelTwoCate incomeTwoCate;
     private List<String> twoCateNameList;
 
+    private AccountBookInfo bookInfo;
     private int bookType;   //0:支出  1:收入
+    private String cateName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +82,8 @@ public class AddAccountBookActivity extends BaseActivity {
 
     private void initIntentData() {
         Intent intent = getIntent();
-        bookType = intent.getIntExtra("bookType", 0);
+        bookInfo = (AccountBookInfo) intent.getSerializableExtra("bookInfo");
+        bookType = bookInfo.getBookType();
     }
 
     private void initView() {
@@ -106,16 +109,18 @@ public class AddAccountBookActivity extends BaseActivity {
         oneCateNameList = new ArrayList<>();
         twoCateNameList = new ArrayList<>();
         if (bookType == 0) {
-            tv_back.setText("添加支出");
+            tv_back.setText("编辑支出");
             expendOneCateList = new ArrayList<>();
             expendTwoCateList = new ArrayList<>();
         } else {
-            tv_back.setText("添加收入");
+            tv_back.setText("编辑收入");
             incomeOneCateList = new ArrayList<>();
             incomeTwoCateList = new ArrayList<>();
         }
 
-        tv_time.setText(BasisTimesUtils.getDeviceTime());
+        et_money.setText(String.valueOf(bookInfo.getMoney()));
+        tv_time.setText(bookInfo.getTimeStr());
+        et_note.setText(bookInfo.getNoteStr());
     }
 
     private void initData() {
@@ -125,6 +130,7 @@ public class AddAccountBookActivity extends BaseActivity {
         } else {
             getIncomeOneCateList();
         }
+
     }
 
     private void initClick() {
@@ -192,7 +198,6 @@ public class AddAccountBookActivity extends BaseActivity {
                 }
             }
 
-            String cateName;
             if (bookType == 0) {
                 if (expendTwoCate != null) {
                     cateName = expendOneCate.getCateName() + " - " + expendTwoCate.getCateName();
@@ -207,7 +212,6 @@ public class AddAccountBookActivity extends BaseActivity {
                 }
             }
 
-            AccountBookInfo bookInfo = new AccountBookInfo();
             bookInfo.setMoney(Double.valueOf(money));
             bookInfo.setMoney(Double.valueOf(money));
             bookInfo.setTimeStr(tv_time.getText().toString());
@@ -221,7 +225,7 @@ public class AddAccountBookActivity extends BaseActivity {
             bookInfo.setWalletType(walletName);
             bookInfo.setBookType(bookType);
 
-            daoSession.insert(bookInfo);
+            daoSession.update(bookInfo);
             finish();
             ToastUtil.showShortToast(context, "保存成功");
         });

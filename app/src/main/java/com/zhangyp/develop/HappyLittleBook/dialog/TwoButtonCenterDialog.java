@@ -22,21 +22,22 @@ import com.zhangyp.develop.HappyLittleBook.R;
 
 public class TwoButtonCenterDialog extends Dialog {
 
-    private String tv_tips;
     private OnClickRateDialog onClickRateListener;
+    private TextView textView;
 
-    public TwoButtonCenterDialog(Context context, String tv_tips, boolean b) {
+    public TwoButtonCenterDialog(Context context) {
         super(context);
-
-        this.tv_tips = tv_tips;
-        this.setCancelable(b);
         setCustomDialog();
+    }
+
+    public void setTips(String tips){
+        textView.setText(tips);
     }
 
     private void setCustomDialog() {
         View mView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_two_button_center, null);
-        TextView textView = mView.findViewById(R.id.tv_tips);
-        textView.setText(tv_tips);
+        textView = mView.findViewById(R.id.tv_tips);
+
         Button positiveButton = mView.findViewById(R.id.button2);
         Button negativeButton = mView.findViewById(R.id.button1);
         if (positiveButton != null) positiveButton.setOnClickListener(v -> {

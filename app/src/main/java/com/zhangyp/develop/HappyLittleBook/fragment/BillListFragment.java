@@ -1,5 +1,6 @@
 package com.zhangyp.develop.HappyLittleBook.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -7,11 +8,14 @@ import android.view.View;
 
 import com.zhangyp.develop.HappyLittleBook.ExampleApplication;
 import com.zhangyp.develop.HappyLittleBook.R;
+import com.zhangyp.develop.HappyLittleBook.activity.ModifyAccountBookActivity;
 import com.zhangyp.develop.HappyLittleBook.adapter.AccountBookInfoAdapter;
 import com.zhangyp.develop.HappyLittleBook.base.BaseFragment;
 import com.zhangyp.develop.HappyLittleBook.bean.AccountBookInfo;
 import com.zhangyp.develop.HappyLittleBook.db.DaoSession;
 import com.zhangyp.develop.HappyLittleBook.dialog.HomeBookDetailDialog;
+import com.zhangyp.develop.HappyLittleBook.dialog.TwoButtonCenterDialog;
+import com.zhangyp.develop.HappyLittleBook.util.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +25,11 @@ public class BillListFragment extends BaseFragment {
     private RecyclerView rv_list;
     private View view_empty;
     private List<AccountBookInfo> bookInfoList;
+    ;
     private AccountBookInfoAdapter adapter;
     private HomeBookDetailDialog bookDetailDialog;
+    private TwoButtonCenterDialog buttonCenterDialog;
+    private boolean isFirst = true;
 
     private int bookType;
 
@@ -49,6 +56,19 @@ public class BillListFragment extends BaseFragment {
     }
 
     @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            // 相当于onResume()方法--获取焦点
+            if (isFirst) {
+                isFirst = false;
+            } else {
+                getAccountBookInfo();
+            }
+        }
+    }
+
+    @Override
     protected void initClick() {
         adapter.setOnItemClickListener((bean, position) -> showBookDetailDialog(bean));
     }
@@ -56,6 +76,7 @@ public class BillListFragment extends BaseFragment {
     private void showBookDetailDialog(AccountBookInfo bean) {
         if (bookDetailDialog == null) {
             bookDetailDialog = new HomeBookDetailDialog(getActivity());
+            bookDetailDialog.setOnBtnClickListener(listener);
         }
         bookDetailDialog.setCancelable(true);
         bookDetailDialog.setData(bean);
@@ -80,8 +101,54 @@ public class BillListFragment extends BaseFragment {
         } else {
             view_empty.setVisibility(View.GONE);
             rv_list.setVisibility(View.VISIBLE);
-            adapter.notifyDataSetChanged();
         }
+        adapter.notifyDataSetChanged();
+    }
+
+    private HomeBookDetailDialog.OnBtnClickListener listener = new HomeBookDetailDialog.OnBtnClickListener() {
+        @Override
+        public void onLeftClick(AccountBookInfo bean) {
+            showConfirmationDialog(bean);
+        }
+
+        @Override
+        public void onRightClick(AccountBookInfo bean) {
+            Intent intent = new Intent(getActivity(), ModifyAccountBookActivity.class);
+            intent.putExtra("bookInfo", bean);
+            startActivity(intent);
+        }
+    };
+
+    private void showConfirmationDialog(AccountBookInfo bean) {
+        String tips;
+        if (bean.getBookType() == 0) {
+            tips = "确定要删除该笔支出吗";
+        } else {
+            tips = "确定要删除该笔收入吗";
+        }
+        if (buttonCenterDialog == null) {
+            buttonCenterDialog = new TwoButtonCenterDialog(getActivity());
+        }
+        buttonCenterDialog.setTips(tips);
+        buttonCenterDialog.show();
+        buttonCenterDialog.setOnClickRateDialog(new TwoButtonCenterDialog.OnClickRateDialog() {
+            @Override
+            public void onClickLeft() {
+                buttonCenterDialog.dismiss();
+            }
+
+            @Override
+            public void onClickRight() {
+                deleteBill(bean);
+                buttonCenterDialog.dismiss();
+            }
+        });
+    }
+
+    private void deleteBill(AccountBookInfo bean) {
+        daoSession.delete(bean);
+        initData();
+        ToastUtil.showShortToast(getActivity(), "删除成功");
     }
 
     @Override

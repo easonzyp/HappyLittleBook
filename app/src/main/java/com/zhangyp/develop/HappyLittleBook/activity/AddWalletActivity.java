@@ -77,8 +77,9 @@ public class AddWalletActivity extends BaseActivity {
 
         iv_delete.setOnClickListener(v -> {
             if (buttonCenterDialog == null) {
-                buttonCenterDialog = new TwoButtonCenterDialog(context, "确定要删除该钱包吗?", true);
+                buttonCenterDialog = new TwoButtonCenterDialog(context);
             }
+            buttonCenterDialog.setTips("确定要删除该钱包吗?");
             buttonCenterDialog.show();
             buttonCenterDialog.setOnClickRateDialog(new TwoButtonCenterDialog.OnClickRateDialog() {
                 @Override

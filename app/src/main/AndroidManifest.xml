@@ -13,7 +13,6 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
@@ -29,25 +28,39 @@
 
     <application
         android:name=".ExampleApplication"
-        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher1"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher1"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.WelcomeActivity" >
+        <activity android:name=".activity.WelcomeActivity">
 
         </activity>
 
-        <activity android:name=".activity.MainActivity" >
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
 
         <activity android:name=".activity.WebActivity" />
 
         <activity android:name=".activity.AddAccountBookActivity" />
+
+        <activity android:name=".activity.ExpendCateManagerActivity" />
+
+        <activity android:name=".activity.IncomeCateManagerActivity" />
+
+        <activity android:name=".activity.WalletManagerActivity" />
+
+        <activity android:name=".activity.AddWalletActivity" />
+
+        <activity android:name=".activity.AppInfoActivity" />
+
+        <activity android:name=".activity.BillListActivity" />
+
+        <activity android:name=".activity.ModifyAccountBookActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -146,9 +159,9 @@
 
         <!-- 注意此配置在 JPush 3.2.0 及以前版本是必须配置，3.2.0 以后版本已废弃此配置-->
         <!--<service-->
-            <!--android:name="cn.jpush.android.service.DownloadService"-->
-            <!--android:enabled="true"-->
-            <!--android:exported="false"></service>-->
+        <!--android:name="cn.jpush.android.service.DownloadService"-->
+        <!--android:enabled="true"-->
+        <!--android:exported="false"></service>-->
 
         <!-- Since JCore2.0.0 Required SDK核心功能-->
         <!-- 可配置android:process参数将Service放在其他进程中；android:enabled属性不能是false -->
@@ -221,13 +234,6 @@
                 <category android:name="com.zhangyp.develop.HappyLittleBook" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ExpendCateManagerActivity" />
-        <activity android:name=".activity.IncomeCateManagerActivity" />
-        <activity android:name=".activity.WalletManagerActivity" />
-        <activity android:name=".activity.AddWalletActivity" />
-        <activity android:name=".activity.AppInfoActivity" />
-        <activity android:name=".activity.BillListActivity" />
-
 
         <service
             android:name="com.zhangyp.develop.HappyLittleBook.service.PushService"

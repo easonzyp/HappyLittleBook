@@ -3,7 +3,6 @@
     android:shape="rectangle">
     <!--圆角，颜色渐变-->
     <corners
-        android:bottomLeftRadius="3dp"
         android:bottomRightRadius="3dp" />
     <solid android:color="@color/mainColor" />
 </shape>

@@ -2,7 +2,6 @@ package com.zhangyp.develop.HappyLittleBook.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -10,11 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.zhangyp.develop.HappyLittleBook.R;
-import com.zhangyp.develop.HappyLittleBook.activity.AddAccountBookActivity;
 import com.zhangyp.develop.HappyLittleBook.bean.AccountBookInfo;
 
 
@@ -34,8 +31,11 @@ public class HomeBookDetailDialog extends Dialog {
     private TextView tv_dialog_note;
     private TextView tv_dialog_money;
     private TextView tv_dialog_book_type;
-    private TextView tv_dialog_ok;
+    private TextView tv_dialog_delete;
+    private TextView tv_dialog_modify;
     private AccountBookInfo bean;
+
+    private OnBtnClickListener listener;
 
     public HomeBookDetailDialog(Context context) {
         super(context, R.style.DialogTheme);
@@ -52,7 +52,8 @@ public class HomeBookDetailDialog extends Dialog {
         tv_dialog_note = view.findViewById(R.id.tv_dialog_note);
         tv_dialog_book_type = view.findViewById(R.id.tv_dialog_book_type);
         tv_dialog_money = view.findViewById(R.id.tv_dialog_money);
-        tv_dialog_ok = view.findViewById(R.id.tv_dialog_ok);
+        tv_dialog_delete = view.findViewById(R.id.tv_dialog_delete);
+        tv_dialog_modify = view.findViewById(R.id.tv_dialog_modify);
 
         setContentView(view);
 
@@ -82,7 +83,19 @@ public class HomeBookDetailDialog extends Dialog {
     }
 
     private void initClick() {
-        tv_dialog_ok.setOnClickListener(v -> dismiss());
+        tv_dialog_delete.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onLeftClick(bean);
+                dismiss();
+            }
+        });
+
+        tv_dialog_modify.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onRightClick(bean);
+                dismiss();
+            }
+        });
     }
 
     @Override
@@ -97,5 +110,15 @@ public class HomeBookDetailDialog extends Dialog {
         params.gravity = Gravity.CENTER;
         params.width = ViewGroup.LayoutParams.MATCH_PARENT;
         window.setAttributes(params);
+    }
+
+    public interface OnBtnClickListener {
+        void onLeftClick(AccountBookInfo bean);
+
+        void onRightClick(AccountBookInfo bean);
+    }
+
+    public void setOnBtnClickListener(OnBtnClickListener listener) {
+        this.listener = listener;
     }
 }

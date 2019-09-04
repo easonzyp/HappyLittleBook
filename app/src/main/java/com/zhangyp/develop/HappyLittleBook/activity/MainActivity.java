@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zhangyp.develop.HappyLittleBook.ExampleApplication;
 import com.zhangyp.develop.HappyLittleBook.R;
@@ -19,6 +20,8 @@ import com.zhangyp.develop.HappyLittleBook.bean.AccountBookInfo;
 import com.zhangyp.develop.HappyLittleBook.db.DaoSession;
 import com.zhangyp.develop.HappyLittleBook.dialog.CustomDialog;
 import com.zhangyp.develop.HappyLittleBook.dialog.HomeBookDetailDialog;
+import com.zhangyp.develop.HappyLittleBook.dialog.TwoButtonCenterDialog;
+import com.zhangyp.develop.HappyLittleBook.util.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +59,7 @@ public class MainActivity extends BaseActivity {
     private TextView tv_bill;
 
     private HomeBookDetailDialog bookDetailDialog;
+    private TwoButtonCenterDialog buttonCenterDialog;
 
     private List<AccountBookInfo> expendList;
     private List<AccountBookInfo> incomeList;
@@ -193,14 +197,12 @@ public class MainActivity extends BaseActivity {
             Intent intent = new Intent(context, AddAccountBookActivity.class);
             intent.putExtra("bookType", 0);
             startActivity(intent);
-            dialogChoose.dismiss();
         });
 
         ll_home_income.setOnClickListener(v -> {
             Intent intent = new Intent(context, AddAccountBookActivity.class);
             intent.putExtra("bookType", 1);
             startActivity(intent);
-            dialogChoose.dismiss();
         });
 
         adapter.setOnItemClickListener((bean, position) -> showBookDetailDialog(bean));
@@ -247,10 +249,57 @@ public class MainActivity extends BaseActivity {
     private void showBookDetailDialog(AccountBookInfo bean) {
         if (bookDetailDialog == null) {
             bookDetailDialog = new HomeBookDetailDialog(context);
+            bookDetailDialog.setOnBtnClickListener(listener);
         }
         bookDetailDialog.setCancelable(true);
         bookDetailDialog.setData(bean);
         bookDetailDialog.show();
+    }
+
+    private HomeBookDetailDialog.OnBtnClickListener listener = new HomeBookDetailDialog.OnBtnClickListener() {
+        @Override
+        public void onLeftClick(AccountBookInfo bean) {
+            showConfirmationDialog(bean);
+        }
+
+        @Override
+        public void onRightClick(AccountBookInfo bean) {
+            Intent intent = new Intent(context, ModifyAccountBookActivity.class);
+            intent.putExtra("bookInfo", bean);
+            startActivity(intent);
+        }
+    };
+
+    private void showConfirmationDialog(AccountBookInfo bean) {
+        String tips;
+        if (bean.getBookType() == 0) {
+            tips = "确定要删除该笔支出吗";
+        } else {
+            tips = "确定要删除该笔收入吗";
+        }
+        if (buttonCenterDialog == null) {
+            buttonCenterDialog = new TwoButtonCenterDialog(context);
+        }
+        buttonCenterDialog.setTips(tips);
+        buttonCenterDialog.show();
+        buttonCenterDialog.setOnClickRateDialog(new TwoButtonCenterDialog.OnClickRateDialog() {
+            @Override
+            public void onClickLeft() {
+                buttonCenterDialog.dismiss();
+            }
+
+            @Override
+            public void onClickRight() {
+                deleteBill(bean);
+                buttonCenterDialog.dismiss();
+            }
+        });
+    }
+
+    private void deleteBill(AccountBookInfo bean) {
+        daoSession.delete(bean);
+        initData();
+        ToastUtil.showShortToast(context, "删除成功");
     }
 
     @Override
