@@ -41,13 +41,13 @@ public class AccountBookInfoAdapter extends RecyclerView.Adapter<AccountBookInfo
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        if (position > 0) {
-            preBookInfo = getItem(position - 1);
-        }
+
         AccountBookInfo bookInfo = getItem(position);
+        String currentTime = bookInfo.getTimeStr();
+        String currentTimeTemp = BasisTimesUtils.getMonthAndDay(currentTime);
 
         holder.tv_cate.setText(bookInfo.getCateStr());
-        holder.tv_time.setText(bookInfo.getTimeStr());
+        holder.tv_time.setText(currentTime);
         if (bookInfo.getBookType() == 0) {
             holder.tv_type.setText("支");
             holder.tv_type.setBackgroundResource(R.drawable.home_logo_type_corner_bg);
@@ -60,22 +60,11 @@ public class AccountBookInfoAdapter extends RecyclerView.Adapter<AccountBookInfo
             holder.tv_money.setTextColor(ContextCompat.getColor(context, R.color.mainColor));
         }
 
-        String preTime = preBookInfo.getTimeStr();
-        String currentTime = bookInfo.getTimeStr();
-
-        String preTimeTemp = BasisTimesUtils.getMonthAndDay(preTime);
-        String currentTimeTemp = BasisTimesUtils.getMonthAndDay(currentTime);
-
-        if (position == 0) {
+        if (isItemHeader(position)) {
             holder.tv_title_time.setVisibility(View.VISIBLE);
             holder.tv_title_time.setText(currentTimeTemp);
         } else {
-            if (!preTimeTemp.equals(currentTimeTemp)) {
-                holder.tv_title_time.setVisibility(View.VISIBLE);
-                holder.tv_title_time.setText(currentTimeTemp);
-            } else {
-                holder.tv_title_time.setVisibility(View.GONE);
-            }
+            holder.tv_title_time.setVisibility(View.GONE);
         }
 
         holder.itemView.setOnClickListener(v -> {
@@ -84,6 +73,18 @@ public class AccountBookInfoAdapter extends RecyclerView.Adapter<AccountBookInfo
             }
             listener.onClick(bookInfo, holder.getAdapterPosition());
         });
+    }
+
+    private boolean isItemHeader(int position) {
+        if (position == 0) {
+            return true;
+        }
+        AccountBookInfo preBookInfo = getItem(position - 1);
+        AccountBookInfo bookInfo = getItem(position);
+
+        String preTime = BasisTimesUtils.getMonthAndDay(preBookInfo.getTimeStr());
+        String currentTime = BasisTimesUtils.getMonthAndDay(bookInfo.getTimeStr());
+        return !preTime.equals(currentTime);
     }
 
     private AccountBookInfo getItem(int position) {
