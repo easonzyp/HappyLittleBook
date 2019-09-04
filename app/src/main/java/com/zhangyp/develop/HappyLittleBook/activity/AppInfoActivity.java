@@ -12,10 +12,11 @@ import com.zhangyp.develop.HappyLittleBook.base.BaseActivity;
 
 public class AppInfoActivity extends BaseActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        findViewById(R.id.tv_back).setOnClickListener(v -> finish());
     }
 
     @Override

@@ -17,10 +17,8 @@ import com.zhangyp.develop.HappyLittleBook.adapter.AccountBookInfoAdapter;
 import com.zhangyp.develop.HappyLittleBook.base.BaseActivity;
 import com.zhangyp.develop.HappyLittleBook.bean.AccountBookInfo;
 import com.zhangyp.develop.HappyLittleBook.db.DaoSession;
-import com.zhangyp.develop.HappyLittleBook.dialog.HomeBookDetailDialog;
-import com.zhangyp.develop.HappyLittleBook.listener.OnItemClickListener;
-import com.zhangyp.develop.HappyLittleBook.util.ToastUtil;
 import com.zhangyp.develop.HappyLittleBook.dialog.CustomDialog;
+import com.zhangyp.develop.HappyLittleBook.dialog.HomeBookDetailDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +27,10 @@ public class MainActivity extends BaseActivity {
 
     private DaoSession daoSession;
 
-    private View view_main_top;
     private ImageView iv_more;
 
     private TextView tv_app_name;
+    private LinearLayout ll_surplus;
     private TextView tv_surplus;
     private TextView tv_expense_money;
     private TextView tv_expense_count;
@@ -83,7 +81,8 @@ public class MainActivity extends BaseActivity {
 
         tv_app_name = findViewById(R.id.tv_app_name);
         iv_more = findViewById(R.id.iv_more);
-        view_main_top = findViewById(R.id.view_main_top);
+        View view_main_top = findViewById(R.id.view_main_top);
+        ll_surplus = view_main_top.findViewById(R.id.ll_surplus);
         tv_surplus = view_main_top.findViewById(R.id.tv_surplus);
         tv_expense_money = view_main_top.findViewById(R.id.tv_expense_money);
         tv_expense_count = view_main_top.findViewById(R.id.tv_expense_count);
@@ -126,6 +125,8 @@ public class MainActivity extends BaseActivity {
     private void initClick() {
         tv_app_name.setOnClickListener(v -> startActivity(new Intent(context, AppInfoActivity.class)));
 
+        ll_surplus.setOnClickListener(v -> startActivity(new Intent(context, BillListActivity.class)));
+
         //更多
         iv_more.setOnClickListener(v -> {
             if (dialogMore == null) {
@@ -159,7 +160,8 @@ public class MainActivity extends BaseActivity {
 
         //年账单
         tv_bill.setOnClickListener(v -> {
-            ToastUtil.showShortToast(context, "账单功能研发中...");
+            startActivity(new Intent(context, BillListActivity.class));
+            dialogMore.dismiss();
         });
 
         //添加收支
@@ -201,12 +203,7 @@ public class MainActivity extends BaseActivity {
             dialogChoose.dismiss();
         });
 
-        adapter.setOnItemClickListener(new OnItemClickListener<AccountBookInfo>() {
-            @Override
-            public void onClick(AccountBookInfo bean, int position) {
-                showBookDetailDialog(bean);
-            }
-        });
+        adapter.setOnItemClickListener((bean, position) -> showBookDetailDialog(bean));
     }
 
     private void getAccountBookInfo() {

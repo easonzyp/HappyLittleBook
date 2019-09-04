@@ -226,6 +226,7 @@
         <activity android:name=".activity.WalletManagerActivity" />
         <activity android:name=".activity.AddWalletActivity" />
         <activity android:name=".activity.AppInfoActivity" />
+        <activity android:name=".activity.BillListActivity" />
 
 
         <service

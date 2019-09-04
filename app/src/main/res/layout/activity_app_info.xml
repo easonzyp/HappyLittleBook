@@ -27,7 +27,7 @@
             android:padding="10dp"
             android:text="软件信息"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
     </RelativeLayout>
 
     <ScrollView
