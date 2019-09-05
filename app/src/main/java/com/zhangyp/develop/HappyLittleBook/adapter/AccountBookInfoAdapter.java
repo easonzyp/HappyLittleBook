@@ -1,13 +1,18 @@
 package com.zhangyp.develop.HappyLittleBook.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.app.hubert.guide.NewbieGuide;
+import com.app.hubert.guide.model.GuidePage;
+import com.app.hubert.guide.model.RelativeGuide;
 import com.zhangyp.develop.HappyLittleBook.R;
 import com.zhangyp.develop.HappyLittleBook.bean.AccountBookInfo;
 import com.zhangyp.develop.HappyLittleBook.listener.OnItemClickListener;
@@ -25,12 +30,10 @@ public class AccountBookInfoAdapter extends RecyclerView.Adapter<AccountBookInfo
     private Context context;
     private List<AccountBookInfo> list;
     private OnItemClickListener<AccountBookInfo> listener;
-    private AccountBookInfo preBookInfo;
 
     public AccountBookInfoAdapter(Context context, List<AccountBookInfo> list) {
         this.context = context;
         this.list = list;
-        preBookInfo = new AccountBookInfo();
     }
 
     @Override
@@ -73,6 +76,16 @@ public class AccountBookInfoAdapter extends RecyclerView.Adapter<AccountBookInfo
             }
             listener.onClick(bookInfo, holder.getAdapterPosition());
         });
+
+        if (position == 0) {
+            NewbieGuide.with((Activity) context)
+                    .setLabel("list_item")
+                    .addGuidePage(GuidePage.newInstance()
+                            .addHighLight(holder.itemView, new RelativeGuide(R.layout.newbie_list_item,
+                                    Gravity.BOTTOM, 10))
+                    )
+                    .show();
+        }
     }
 
     private boolean isItemHeader(int position) {

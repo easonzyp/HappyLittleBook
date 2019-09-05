@@ -97,7 +97,7 @@ public class AddWalletActivity extends BaseActivity {
 
     private void deleteWallet() {
         daoSession.delete(wallet);
-        ToastUtil.showShortToast(context, "钱包删除成功");
+        ToastUtil.showSuccessToast(context, "钱包删除成功");
         finish();
     }
 
@@ -110,13 +110,13 @@ public class AddWalletActivity extends BaseActivity {
 
         String name = et_name.getText().toString().trim();
         if (TextUtils.isEmpty(name)) {
-            ToastUtil.showShortToast(context, "请填写钱包名称");
+            ToastUtil.showWarningToast(context, "请填写钱包名称");
             return;
         }
 
         String money = et_money.getText().toString().trim();
         if (TextUtils.isEmpty(money)) {
-            ToastUtil.showShortToast(context, "请填写钱包金额");
+            ToastUtil.showWarningToast(context, "请填写钱包金额");
             return;
         }
 
@@ -140,7 +140,7 @@ public class AddWalletActivity extends BaseActivity {
 
         daoSession.insert(walletInfo);
         finish();
-        ToastUtil.showShortToast(context, "钱包添加成功");
+        ToastUtil.showSuccessToast(context, "钱包添加成功");
     }
 
     private void modifyWallet(String name, String money, String note) {
@@ -151,6 +151,6 @@ public class AddWalletActivity extends BaseActivity {
 
         daoSession.update(wallet);
         finish();
-        ToastUtil.showShortToast(context, "钱包修改成功");
+        ToastUtil.showSuccessToast(context, "钱包修改成功");
     }
 }

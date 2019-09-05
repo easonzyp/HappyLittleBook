@@ -168,26 +168,26 @@ public class AddAccountBookActivity extends BaseActivity {
             String money = et_money.getText().toString().trim();
             if (TextUtils.isEmpty(money)) {
                 if (bookType == 0) {
-                    ToastUtil.showShortToast(context, "请填写支出金额");
+                    ToastUtil.showWarningToast(context, "请填写支出金额");
                 } else {
-                    ToastUtil.showShortToast(context, "请填写收入金额");
+                    ToastUtil.showWarningToast(context, "请填写收入金额");
                 }
                 return;
             }
 
             if (TextUtils.isEmpty(walletName)) {
-                ToastUtil.showShortToast(context, "请选择钱包");
+                ToastUtil.showWarningToast(context, "请选择钱包");
                 return;
             }
 
             if (bookType == 0) {
                 if (expendTwoCate == null && expendOneCate == null) {
-                    ToastUtil.showShortToast(context, "请选择支出分类");
+                    ToastUtil.showWarningToast(context, "请选择支出分类");
                     return;
                 }
             } else {
                 if (incomeTwoCate == null && incomeOneCate == null) {
-                    ToastUtil.showShortToast(context, "请选择收入分类");
+                    ToastUtil.showWarningToast(context, "请选择收入分类");
                     return;
                 }
             }
@@ -223,7 +223,7 @@ public class AddAccountBookActivity extends BaseActivity {
 
             daoSession.insert(bookInfo);
             finish();
-            ToastUtil.showShortToast(context, "保存成功");
+            ToastUtil.showSuccessToast(context, "保存成功");
         });
     }
 

@@ -10,8 +10,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.app.hubert.guide.NewbieGuide;
+import com.app.hubert.guide.model.GuidePage;
+import com.app.hubert.guide.model.RelativeGuide;
 import com.zhangyp.develop.HappyLittleBook.ExampleApplication;
 import com.zhangyp.develop.HappyLittleBook.R;
 import com.zhangyp.develop.HappyLittleBook.adapter.AccountBookInfoAdapter;
@@ -66,12 +68,14 @@ public class MainActivity extends BaseActivity {
 
     private List<AccountBookInfo> bookInfoList;
     private AccountBookInfoAdapter adapter;
+    private LinearLayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
         initClick();
+        initNewbieGuide();
     }
 
     @Override
@@ -115,7 +119,8 @@ public class MainActivity extends BaseActivity {
 
         bookInfoList = new ArrayList<>();
         adapter = new AccountBookInfoAdapter(context, bookInfoList);
-        rv_list.setLayoutManager(new LinearLayoutManager(context));
+        layoutManager = new LinearLayoutManager(context);
+        rv_list.setLayoutManager(layoutManager);
         /*rv_list.addItemDecoration(new MyDividerItemDecoration(context,
                 LinearLayoutManager.HORIZONTAL, 1, ContextCompat.getColor(context, R.color.line)));*/
         rv_list.setAdapter(adapter);
@@ -220,6 +225,7 @@ public class MainActivity extends BaseActivity {
             rv_list.setVisibility(View.VISIBLE);
             adapter.notifyDataSetChanged();
         }
+
     }
 
     private void getBookBaseInfo() {
@@ -299,7 +305,36 @@ public class MainActivity extends BaseActivity {
     private void deleteBill(AccountBookInfo bean) {
         daoSession.delete(bean);
         initData();
-        ToastUtil.showShortToast(context, "删除成功");
+        ToastUtil.showSuccessToast(context, "删除成功");
+    }
+
+    private void initNewbieGuide() {
+        NewbieGuide.with(this)
+                .setLabel("app_info")
+                .addGuidePage(GuidePage.newInstance()
+                                .addHighLight(tv_app_name, new RelativeGuide(R.layout.newbie_app_info,
+                                        Gravity.BOTTOM, 10))
+//                        .setLayoutRes(R.layout.newbie_app_info)
+                )
+
+                .addGuidePage(GuidePage.newInstance()
+                                .addHighLight(iv_more, new RelativeGuide(R.layout.newbie_more,
+                                        Gravity.LEFT, 10))
+//                        .setLayoutRes(R.layout.newbie_app_info)
+                )
+
+                .addGuidePage(GuidePage.newInstance()
+                                .addHighLight(ll_surplus, new RelativeGuide(R.layout.newbie_bill_info,
+                                        Gravity.BOTTOM, 10))
+//                        .setLayoutRes(R.layout.newbie_app_info)
+                )
+
+                .addGuidePage(GuidePage.newInstance()
+                                .addHighLight(iv_home_add, new RelativeGuide(R.layout.newbie_bottom_add,
+                                        Gravity.TOP, 10))
+//                        .setLayoutRes(R.layout.newbie_app_info)
+                )
+                .show();
     }
 
     @Override

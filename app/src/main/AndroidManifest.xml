@@ -33,10 +33,17 @@
         android:roundIcon="@mipmap/ic_launcher1"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.WelcomeActivity">
-
+            <!--<intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>-->
         </activity>
 
-        <activity android:name=".activity.MainActivity">
+        <activity
+            android:name=".activity.MainActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -44,23 +51,50 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.WebActivity" />
+        <activity
+            android:name=".activity.WebActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
-        <activity android:name=".activity.AddAccountBookActivity" />
+        <activity
+            android:name=".activity.AddAccountBookActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
-        <activity android:name=".activity.ExpendCateManagerActivity" />
+        <activity
+            android:name=".activity.ExpendCateManagerActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
-        <activity android:name=".activity.IncomeCateManagerActivity" />
+        <activity
+            android:name=".activity.IncomeCateManagerActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
-        <activity android:name=".activity.WalletManagerActivity" />
+        <activity
+            android:name=".activity.WalletManagerActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
-        <activity android:name=".activity.AddWalletActivity" />
+        <activity
+            android:name=".activity.AddWalletActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
-        <activity android:name=".activity.AppInfoActivity" />
+        <activity
+            android:name=".activity.AppInfoActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
-        <activity android:name=".activity.BillListActivity" />
+        <activity
+            android:name=".activity.BillListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
-        <activity android:name=".activity.ModifyAccountBookActivity" />
+        <activity
+            android:name=".activity.ModifyAccountBookActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -247,6 +281,13 @@
             android:name="JPUSH_CHANNEL"
             android:value="developer-default" />
         <!-- Required. AppKey copied from Portal -->
+
+        <!--第一个-->
+        <meta-data
+            android:name="JPUSH_APPKEY"
+            android:value="5eb4e4303939a5435015a162" />
+
+        <!--柠檬味-->
         <meta-data
             android:name="JPUSH_APPKEY"
             android:value="5eb4e4303939a5435015a162" />

@@ -208,7 +208,7 @@ public class WelcomeActivity extends BaseActivity {
                     @Override
                     public void run() {
                         pd1.dismiss();
-                        ToastUtil.showShortToast(WelcomeActivity.this, msg);
+                        ToastUtil.showWarningToast(WelcomeActivity.this, msg);
                         goMainPage();
                     }
                 });

@@ -38,8 +38,8 @@ public class TwoButtonCenterDialog extends Dialog {
         View mView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_two_button_center, null);
         textView = mView.findViewById(R.id.tv_tips);
 
-        Button positiveButton = mView.findViewById(R.id.button2);
-        Button negativeButton = mView.findViewById(R.id.button1);
+        TextView positiveButton = mView.findViewById(R.id.button2);
+        TextView negativeButton = mView.findViewById(R.id.button1);
         if (positiveButton != null) positiveButton.setOnClickListener(v -> {
             if (onClickRateListener != null)
                 onClickRateListener.onClickRight();
@@ -66,6 +66,7 @@ public class TwoButtonCenterDialog extends Dialog {
         WindowManager.LayoutParams params = window.getAttributes();
         params.gravity = Gravity.CENTER;
         params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
         window.setAttributes(params);
     }
 

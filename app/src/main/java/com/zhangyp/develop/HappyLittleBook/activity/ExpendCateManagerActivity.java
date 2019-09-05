@@ -138,7 +138,7 @@ public class ExpendCateManagerActivity extends BaseActivity {
 
         iv_add_two_cate.setOnClickListener(v -> {
             if (oneCateList == null || oneCateList.size() == 0) {
-                ToastUtil.showShortToast(context, "请先添加一级分类");
+                ToastUtil.showWarningToast(context, "请先添加一级分类");
                 return;
             }
             showDialogType = ADD_CATE_TYPE_TWO;
@@ -170,7 +170,7 @@ public class ExpendCateManagerActivity extends BaseActivity {
         tv_commit.setOnClickListener(v -> {
             String cateName = et_cate.getText().toString().trim();
             if (TextUtils.isEmpty(cateName)) {
-                ToastUtil.showShortToast(context, "请填写分类名称");
+                ToastUtil.showWarningToast(context, "请填写分类名称");
                 return;
             }
             if (showDialogType == ADD_CATE_TYPE_ONE) {
@@ -274,7 +274,7 @@ public class ExpendCateManagerActivity extends BaseActivity {
     private void deleteOneCate(ExpendLevelOneCate oneCate) {
         List<ExpendLevelTwoCate> twoCateList = daoSession.queryRaw(ExpendLevelTwoCate.class, "where ONE_CATE_ID = ?", String.valueOf(oneCate.getId()));
         if (twoCateList != null && twoCateList.size() > 0) {
-            ToastUtil.showShortToast(context, "该分类下有二级分类，无法删除");
+            ToastUtil.showWarningToast(context, "该分类下有二级分类，无法删除");
             return;
         }
 

@@ -148,7 +148,7 @@ public class BillListFragment extends BaseFragment {
     private void deleteBill(AccountBookInfo bean) {
         daoSession.delete(bean);
         initData();
-        ToastUtil.showShortToast(getActivity(), "删除成功");
+        ToastUtil.showSuccessToast(getActivity(), "删除成功");
     }
 
     @Override
