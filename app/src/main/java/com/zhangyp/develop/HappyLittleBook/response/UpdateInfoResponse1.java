@@ -7,7 +7,7 @@ import com.zhangyp.develop.HappyLittleBook.base.BaseResponse;
  * class note:
  */
 
-public class UpdateInfoResponse extends BaseResponse {
+public class UpdateInfoResponse1 extends BaseResponse {
 
     /**
      * success : true

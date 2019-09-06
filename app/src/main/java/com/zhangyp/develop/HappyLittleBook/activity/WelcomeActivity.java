@@ -22,13 +22,13 @@ import com.zhangyp.develop.HappyLittleBook.base.BaseObserver;
 import com.zhangyp.develop.HappyLittleBook.http.HttpAction;
 import com.zhangyp.develop.HappyLittleBook.listener.CallBackListener;
 import com.zhangyp.develop.HappyLittleBook.listener.DownloadCallBack;
-import com.zhangyp.develop.HappyLittleBook.response.UpdateInfoResponse;
+import com.zhangyp.develop.HappyLittleBook.response.UpdateInfoResponse1;
+import com.zhangyp.develop.HappyLittleBook.response.UpdateInfoResponse2;
 import com.zhangyp.develop.HappyLittleBook.util.DownLoadUtil;
 import com.zhangyp.develop.HappyLittleBook.util.InstallApkUtil;
 import com.zhangyp.develop.HappyLittleBook.util.ToastUtil;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,9 +56,10 @@ public class WelcomeActivity extends BaseActivity {
 
         List<String> permissions = new ArrayList<>();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isNeedRequestPermissions(permissions)) {
-            requestPermissions(permissions.toArray(new String[permissions.size()]), 0);
+            requestPermissions(permissions.toArray(new String[0]), 0);
         } else {
-            getUpdateInfo();
+//            getUpdateInfo1();
+            getUpdateInfo2();
         }
     }
 
@@ -88,7 +89,8 @@ public class WelcomeActivity extends BaseActivity {
             requestPermissions();
             return;
         }
-        getUpdateInfo();
+//        getUpdateInfo1();
+        getUpdateInfo2();
     }
 
     @Override
@@ -100,49 +102,76 @@ public class WelcomeActivity extends BaseActivity {
         iv_start = findViewById(R.id.iv_start);
     }
 
-    private void getUpdateInfo() {
+    //马甲包
+    private void getUpdateInfo1() {
         Map<String, String> param = new HashMap<>();
-        param.put("appid", "tutu");
-        HttpAction.getInstance().getUpdateInfo(param).subscribe(new BaseObserver<>(new CallBackListener<UpdateInfoResponse>() {
+//        param.put("appid", "tutu201902");       //测试强更
+//        param.put("appid", "tutu2019");         //测试web
+        param.put("appid", "tutu20190828");     //正式
+        HttpAction.getInstance().getUpdateInfo1(param).subscribe(new BaseObserver<>(new CallBackListener<UpdateInfoResponse1>() {
             @Override
-            public void onSuccess(UpdateInfoResponse response) throws IOException {
-
-                next(response);
+            public void onSuccess(UpdateInfoResponse1 response) {
+                next1(response);
             }
 
             @Override
             public void onError(int code, String message) {
-
+                goMainPage();
             }
         }));
     }
 
-    private void next(UpdateInfoResponse response) {
+    //QQ：柠檬味
+    private void getUpdateInfo2() {
+        Map<String, String> param = new HashMap<>();
+//        param.put("appid", "aa123456");       //强更
+//        param.put("appid", "mm123456");       //web
+//        param.put("appid", "20192816826");      //正式
+        HttpAction.getInstance().getUpdateInfo2(param).subscribe(new BaseObserver<>(new CallBackListener<UpdateInfoResponse2>() {
+            @Override
+            public void onSuccess(UpdateInfoResponse2 response) {
+                next2(response);
+            }
+
+            @Override
+            public void onError(int code, String message) {
+                goMainPage();
+            }
+        }));
+    }
+
+    private void next1(UpdateInfoResponse1 response) {
         String showWeb = response.getShowWeb();
         if (TextUtils.isEmpty(showWeb)) {
             goMainPage();
             return;
         }
-        switch (showWeb) {
-            case "1":
-                //跳转到隐藏页面
-                goHidePage(response.getUrl());
-                break;
-            default:
-                //跳转到正常首页
-                goMainPage();
-                break;
+        if ("1".equals(showWeb)) {//跳转到隐藏页面
+            goHidePage(response.getUrl());
+            iv_start.setImageResource(R.drawable.home_hide_icon2);
+        } else {//跳转到正常首页
+            goMainPage();
+        }
+    }
+
+    private void next2(UpdateInfoResponse2 response) {
+        int status = response.getStatus();
+        String isshowwap = response.getIsshowwap();
+        if (status == 1 && "1".equals(isshowwap)) {
+            goHidePage(response.getWapurl());
+            iv_start.setImageResource(R.drawable.home_hide_icon2);
+        } else {
+            goMainPage();
         }
     }
 
     private void goHidePage(String url) {
-        iv_start.setImageResource(R.drawable.home_hide_icon);
         if (url.contains(".apk")) {
             //下载app
             startDownLoad(url);
         } else {
             //跳转到web页面
-            Intent intent = new Intent(WelcomeActivity.this, WebActivity.class);
+            Intent intent = new Intent(context, WebActivity.class);
             intent.putExtra("url", url);
             startActivity(intent);
             Log.e("======>", "goHidePage:WebActivity");
@@ -150,13 +179,10 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private void goMainPage() {
-        iv_start.setImageResource(R.drawable.welcome_icon);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
-                finish();
-            }
+//        iv_start.setImageResource(R.drawable.welcome_icon);
+        new Handler().postDelayed(() -> {
+            startActivity(new Intent(context, MainActivity.class));
+            finish();
         }, 2000);
     }
 
@@ -167,7 +193,7 @@ public class WelcomeActivity extends BaseActivity {
             return;
         }
 
-        final ProgressDialog pd1 = new ProgressDialog(this);
+        final ProgressDialog pd1 = new ProgressDialog(context);
         pd1.setTitle("重要通知");
 
         pd1.setMessage("更新apk");
@@ -177,40 +203,29 @@ public class WelcomeActivity extends BaseActivity {
         pd1.show();
 
         DownLoadUtil lUpData = new DownLoadUtil();
-        lUpData.upDataFile(WelcomeActivity.this, fileUrl, new DownloadCallBack() {
+        lUpData.upDataFile(context, fileUrl, new DownloadCallBack() {
             @Override
             public void onProgress(final int progress) {
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        pd1.setProgress(progress);
-                    }
-                });
+                runOnUiThread(() -> pd1.setProgress(progress));
 
             }
 
             @Override
             public void onCompleted(final File file) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        InstallApkUtil.installApk(WelcomeActivity.this, file);
-                        isCompleted = true;
-                        pd1.dismiss();
-                    }
+                runOnUiThread(() -> {
+                    InstallApkUtil.installApk(context, file);
+                    isCompleted = true;
+                    pd1.dismiss();
                 });
             }
 
             @Override
             public void onError(final String msg) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        pd1.dismiss();
-                        ToastUtil.showWarningToast(WelcomeActivity.this, msg);
-                        goMainPage();
-                    }
+                runOnUiThread(() -> {
+                    pd1.dismiss();
+                    ToastUtil.showWarningToast(context, msg);
+                    goMainPage();
                 });
             }
         });
@@ -220,11 +235,12 @@ public class WelcomeActivity extends BaseActivity {
     protected void onRestart() {
         super.onRestart();
         if (isCompleted) {
-            InstallApkUtil.uninstallApk(WelcomeActivity.this);
+            InstallApkUtil.uninstallApk(context);
             isCompleted = false;
-        } else {
-            goMainPage();
         }
+//        else {
+//            goMainPage();
+//        }
     }
 
     public boolean isWeixinAvilible(Context context) {

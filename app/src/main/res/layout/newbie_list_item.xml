@@ -25,7 +25,7 @@
             android:layout_marginTop="20dp"
             android:gravity="center_horizontal"
             android:lineSpacingMultiplier="1.5"
-            android:text="点击此区域\n可可查看收支详情"
+            android:text="点击此区域\n可查看收支详情"
             android:textColor="@color/white"
             android:textSize="18sp" />
 

@@ -33,22 +33,22 @@
         android:roundIcon="@mipmap/ic_launcher1"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.WelcomeActivity">
-            <!--<intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="android.intent.action.VIEW" />
-            </intent-filter>-->
+            </intent-filter>
         </activity>
 
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" >
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
                 <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
 
         <activity
@@ -283,14 +283,14 @@
         <!-- Required. AppKey copied from Portal -->
 
         <!--第一个-->
-        <meta-data
+        <!--<meta-data
             android:name="JPUSH_APPKEY"
-            android:value="5eb4e4303939a5435015a162" />
+            android:value="5eb4e4303939a5435015a162" />-->
 
         <!--柠檬味-->
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="5eb4e4303939a5435015a162" />
+            android:value="" />
 
     </application>
 

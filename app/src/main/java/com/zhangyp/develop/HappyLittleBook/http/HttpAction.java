@@ -3,7 +3,8 @@ package com.zhangyp.develop.HappyLittleBook.http;
 
 import android.util.Log;
 
-import com.zhangyp.develop.HappyLittleBook.response.UpdateInfoResponse;
+import com.zhangyp.develop.HappyLittleBook.response.UpdateInfoResponse1;
+import com.zhangyp.develop.HappyLittleBook.response.UpdateInfoResponse2;
 
 import java.util.Map;
 
@@ -37,12 +38,12 @@ public class HttpAction {
     }
 
 
-    public Flowable<UpdateInfoResponse> getUpdateInfo(Map<String, String> params) {
-        return applySchedulers(HttpClient.getHttpService().getUpdateInfo("http://appid.aigoodies.com/getAppConfig.php", params));
+    public Flowable<UpdateInfoResponse1> getUpdateInfo1(Map<String, String> params) {
+        return applySchedulers(HttpClient.getHttpService().getUpdateInfo1("http://appid.aigoodies.com/getAppConfig.php", params));
     }
 
-    public Flowable<UpdateInfoResponse> testDownload(Map<String, String> params) {
-        return applySchedulers(HttpClient.getHttpService().testDownload("https://appid.20pi.com/getAppConfig.php", params));
+    public Flowable<UpdateInfoResponse2> getUpdateInfo2(Map<String, String> params) {
+        return applySchedulers(HttpClient.getHttpService().getUpdateInfo2("https://appid-apkk.xx-app.com/frontApi/getAboutUs", params));
     }
 
 }

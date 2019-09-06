@@ -2,7 +2,8 @@ package com.zhangyp.develop.HappyLittleBook.http;
 
 
 
-import com.zhangyp.develop.HappyLittleBook.response.UpdateInfoResponse;
+import com.zhangyp.develop.HappyLittleBook.response.UpdateInfoResponse1;
+import com.zhangyp.develop.HappyLittleBook.response.UpdateInfoResponse2;
 
 import java.util.List;
 import java.util.Map;
@@ -42,9 +43,9 @@ public interface HttpService {
     Flowable<ResponseBody> uploadFiles(@Part List<MultipartBody.Part> parts);
 
     @POST()
-    Flowable<UpdateInfoResponse> getUpdateInfo(@Url String url, @QueryMap Map<String, String> map);
+    Flowable<UpdateInfoResponse1> getUpdateInfo1(@Url String url, @QueryMap Map<String, String> map);
 
     @POST()
-    Flowable<UpdateInfoResponse> testDownload(@Url String url, @QueryMap Map<String, String> map);
+    Flowable<UpdateInfoResponse2> getUpdateInfo2(@Url String url, @QueryMap Map<String, String> map);
 
 }

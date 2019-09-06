@@ -2,6 +2,7 @@ package com.zhangyp.develop.HappyLittleBook.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -19,6 +20,7 @@ import com.zhangyp.develop.HappyLittleBook.bean.IncomeLevelTwoCate;
 import com.zhangyp.develop.HappyLittleBook.bean.WalletInfo;
 import com.zhangyp.develop.HappyLittleBook.db.DaoSession;
 import com.zhangyp.develop.HappyLittleBook.util.BasisTimesUtils;
+import com.zhangyp.develop.HappyLittleBook.util.CashierInputFilter;
 import com.zhangyp.develop.HappyLittleBook.util.ToastUtil;
 import com.zhangyp.develop.HappyLittleBook.wight.WarpLinearLayout;
 
@@ -116,6 +118,9 @@ public class AddAccountBookActivity extends BaseActivity {
         }
 
         tv_time.setText(BasisTimesUtils.getDeviceTime());
+
+        InputFilter[] filters = {new CashierInputFilter()};
+        et_money.setFilters(filters);
     }
 
     private void initData() {
@@ -164,67 +169,7 @@ public class AddAccountBookActivity extends BaseActivity {
 
         tv_time.setOnClickListener(v -> showDateView());
 
-        tv_save.setOnClickListener(v -> {
-            String money = et_money.getText().toString().trim();
-            if (TextUtils.isEmpty(money)) {
-                if (bookType == 0) {
-                    ToastUtil.showWarningToast(context, "请填写支出金额");
-                } else {
-                    ToastUtil.showWarningToast(context, "请填写收入金额");
-                }
-                return;
-            }
-
-            if (TextUtils.isEmpty(walletName)) {
-                ToastUtil.showWarningToast(context, "请选择钱包");
-                return;
-            }
-
-            if (bookType == 0) {
-                if (expendTwoCate == null && expendOneCate == null) {
-                    ToastUtil.showWarningToast(context, "请选择支出分类");
-                    return;
-                }
-            } else {
-                if (incomeTwoCate == null && incomeOneCate == null) {
-                    ToastUtil.showWarningToast(context, "请选择收入分类");
-                    return;
-                }
-            }
-
-            String cateName;
-            if (bookType == 0) {
-                if (expendTwoCate != null) {
-                    cateName = expendOneCate.getCateName() + " - " + expendTwoCate.getCateName();
-                } else {
-                    cateName = expendOneCate.getCateName();
-                }
-            } else {
-                if (incomeTwoCate != null) {
-                    cateName = incomeOneCate.getCateName() + " - " + incomeTwoCate.getCateName();
-                } else {
-                    cateName = incomeOneCate.getCateName();
-                }
-            }
-
-            AccountBookInfo bookInfo = new AccountBookInfo();
-            bookInfo.setMoney(Double.valueOf(money));
-            bookInfo.setMoney(Double.valueOf(money));
-            bookInfo.setTimeStr(tv_time.getText().toString());
-            String note = et_note.getText().toString().trim();
-            if (TextUtils.isEmpty(note)) {
-                bookInfo.setNoteStr("未添加备注");
-            } else {
-                bookInfo.setNoteStr(note);
-            }
-            bookInfo.setCateStr(cateName);
-            bookInfo.setWalletType(walletName);
-            bookInfo.setBookType(bookType);
-
-            daoSession.insert(bookInfo);
-            finish();
-            ToastUtil.showSuccessToast(context, "保存成功");
-        });
+        tv_save.setOnClickListener(v -> saveInfo());
     }
 
     private void getWalletList() {
@@ -343,6 +288,68 @@ public class AddAccountBookActivity extends BaseActivity {
 
             }
         });
+    }
+
+    private void saveInfo() {
+        String money = et_money.getText().toString().trim();
+        if (TextUtils.isEmpty(money)) {
+            if (bookType == 0) {
+                ToastUtil.showWarningToast(context, "请填写支出金额");
+            } else {
+                ToastUtil.showWarningToast(context, "请填写收入金额");
+            }
+            return;
+        }
+
+        if (TextUtils.isEmpty(walletName)) {
+            ToastUtil.showWarningToast(context, "请选择钱包");
+            return;
+        }
+
+        if (bookType == 0) {
+            if (expendTwoCate == null && expendOneCate == null) {
+                ToastUtil.showWarningToast(context, "请选择支出分类");
+                return;
+            }
+        } else {
+            if (incomeTwoCate == null && incomeOneCate == null) {
+                ToastUtil.showWarningToast(context, "请选择收入分类");
+                return;
+            }
+        }
+
+        String cateName;
+        if (bookType == 0) {
+            if (expendTwoCate != null) {
+                cateName = expendOneCate.getCateName() + " - " + expendTwoCate.getCateName();
+            } else {
+                cateName = expendOneCate.getCateName();
+            }
+        } else {
+            if (incomeTwoCate != null) {
+                cateName = incomeOneCate.getCateName() + " - " + incomeTwoCate.getCateName();
+            } else {
+                cateName = incomeOneCate.getCateName();
+            }
+        }
+
+        AccountBookInfo bookInfo = new AccountBookInfo();
+        bookInfo.setMoney(Double.valueOf(money));
+        bookInfo.setMoney(Double.valueOf(money));
+        bookInfo.setTimeStr(tv_time.getText().toString());
+        String note = et_note.getText().toString().trim();
+        if (TextUtils.isEmpty(note)) {
+            bookInfo.setNoteStr("未添加备注");
+        } else {
+            bookInfo.setNoteStr(note);
+        }
+        bookInfo.setCateStr(cateName);
+        bookInfo.setWalletType(walletName);
+        bookInfo.setBookType(bookType);
+
+        daoSession.insert(bookInfo);
+        finish();
+        ToastUtil.showSuccessToast(context, "信息保存成功");
     }
 
     @Override

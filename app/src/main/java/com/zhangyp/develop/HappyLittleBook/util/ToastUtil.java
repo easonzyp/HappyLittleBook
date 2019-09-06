@@ -38,4 +38,16 @@ public class ToastUtil {
         toast.setView(layout);
         toast.show();
     }
+
+    public static void showNormalToast(Context context, String text) {
+        if (toast == null) {
+            toast = new Toast(context);
+        }
+        View layout = View.inflate(context, R.layout.normal_toast_view, null);
+        TextView tv_toast = layout.findViewById(R.id.tv_toast);
+        tv_toast.setText(text);
+
+        toast.setView(layout);
+        toast.show();
+    }
 }

@@ -1,6 +1,7 @@
 package com.zhangyp.develop.HappyLittleBook.activity;
 
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -13,6 +14,7 @@ import com.zhangyp.develop.HappyLittleBook.base.BaseActivity;
 import com.zhangyp.develop.HappyLittleBook.bean.WalletInfo;
 import com.zhangyp.develop.HappyLittleBook.db.DaoSession;
 import com.zhangyp.develop.HappyLittleBook.util.BasisTimesUtils;
+import com.zhangyp.develop.HappyLittleBook.util.CashierInputFilter;
 import com.zhangyp.develop.HappyLittleBook.util.ToastUtil;
 import com.zhangyp.develop.HappyLittleBook.dialog.TwoButtonCenterDialog;
 
@@ -64,6 +66,9 @@ public class AddWalletActivity extends BaseActivity {
             et_money.setText(String.valueOf(wallet.getMoney()));
             et_note.setText(wallet.getWalletNote());
         }
+
+        InputFilter[] filters = {new CashierInputFilter()};
+        et_money.setFilters(filters);
     }
 
     private void initData() {
