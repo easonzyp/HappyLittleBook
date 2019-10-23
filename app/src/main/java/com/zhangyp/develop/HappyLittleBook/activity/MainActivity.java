@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.app.hubert.guide.NewbieGuide;
 import com.app.hubert.guide.model.GuidePage;
